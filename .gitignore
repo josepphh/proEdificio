@@ -1,0 +1,43 @@
+# Archivos temporales
+*_temp.php
+*.tmp
+*.bak
+*.swp
+*~
+
+# Archivos de sistema
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDEs
+.vscode/
+.idea/
+*.sublime-*
+
+# Logs
+*.log
+error_log
+php_error_log
+
+# Uploads (archivos de usuario)
+uploads/*
+!uploads/.gitkeep
+
+# Configuración local
+config/local.php
+
+# Node modules (si se usa en el futuro)
+node_modules/
+
+# Composer
+vendor/
+
+# Base de datos
+*.sql
+*.sqlite
+*.db
+
+# Backups
+backups/
+*.backup

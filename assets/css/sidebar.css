@@ -1,0 +1,233 @@
+/* ============================================
+   SIDEBAR NAVIGATION - DARK THEME
+   Sistema de Gestión de Edificios
+   Versión: 2.0
+   ============================================ */
+
+/* ============================================
+   VARIABLES CSS PARA SIDEBAR
+   ============================================ */
+:root {
+    /* Colores del Sidebar */
+    --sidebar-bg: #2c3e50;
+    --sidebar-bg-hover: #34495e;
+    --sidebar-text: #ecf0f1;
+    --sidebar-text-muted: #95a5a6;
+    --sidebar-active-bg: rgba(102, 126, 234, 0.15);
+    --sidebar-active-border: #667eea;
+    --sidebar-section-title: #7f8c8d;
+
+    /* Transiciones */
+    --sidebar-transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ============================================
+   SIDEBAR CONTAINER
+   ============================================ */
+.sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: var(--sidebar-width);
+    height: 100vh;
+    background: var(--sidebar-bg);
+    color: var(--sidebar-text);
+    overflow-y: auto;
+    overflow-x: hidden;
+    transition: var(--sidebar-transition);
+    z-index: var(--z-fixed);
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Scrollbar personalizado para el sidebar */
+.sidebar::-webkit-scrollbar {
+    width: 6px;
+}
+
+.sidebar::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.1);
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 3px;
+}
+
+.sidebar::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+/* ============================================
+   HEADER DEL SIDEBAR
+   ============================================ */
+.sidebar-header {
+    padding: 1.5rem 1.25rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.sidebar-header h2 {
+    margin: 0;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--color-white);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.sidebar-logo {
+    font-size: 1.8rem;
+}
+
+/* ============================================
+   NAVEGACIÓN DEL SIDEBAR
+   ============================================ */
+.sidebar-nav {
+    padding: 1rem 0;
+}
+
+/* Sección de navegación */
+.sidebar-section {
+    margin-bottom: 1.5rem;
+}
+
+.sidebar-section-title {
+    padding: 0.75rem 1.25rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--sidebar-section-title);
+    margin: 0;
+}
+
+/* Items del sidebar */
+.sidebar-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.875rem 1.25rem;
+    color: var(--sidebar-text);
+    text-decoration: none;
+    transition: var(--sidebar-transition);
+    border-left: 3px solid transparent;
+    position: relative;
+}
+
+.sidebar-item:hover {
+    background: var(--sidebar-bg-hover);
+    color: var(--color-white);
+}
+
+.sidebar-item.active {
+    background: var(--sidebar-active-bg);
+    border-left-color: var(--sidebar-active-border);
+    color: var(--color-white);
+}
+
+.sidebar-item.active::before {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 4px;
+    height: 60%;
+    background: var(--sidebar-active-border);
+    border-radius: 2px 0 0 2px;
+}
+
+/* Icono del item */
+.sidebar-icon {
+    font-size: 1.4rem;
+    width: 24px;
+    text-align: center;
+    flex-shrink: 0;
+}
+
+/* Label del item */
+.sidebar-label {
+    font-size: 0.95rem;
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Badge de notificaciones */
+.sidebar-badge {
+    margin-left: auto;
+    background: #e74c3c;
+    color: white;
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 0.2rem 0.5rem;
+    border-radius: 10px;
+    min-width: 20px;
+    text-align: center;
+}
+
+/* ============================================
+   ANIMACIONES
+   ============================================ */
+@keyframes slideInFromLeft {
+    from {
+        transform: translateX(-100%);
+    }
+
+    to {
+        transform: translateX(0);
+    }
+}
+
+.sidebar.active {
+    animation: slideInFromLeft 0.3s ease;
+}
+
+/* ============================================
+   RESPONSIVE DESIGN (Sidebar Specific)
+   ============================================ */
+
+/* Tablets (1024px y menos) */
+@media (max-width: 1024px) {
+    .sidebar-item {
+        padding: 0.75rem 1rem;
+    }
+}
+
+/* Tablets pequeñas (768px y menos) */
+@media (max-width: 768px) {
+
+    /* Sidebar oculto por defecto */
+    .sidebar {
+        transform: translateX(-100%);
+    }
+
+    /* Sidebar visible cuando está activo */
+    .sidebar.active {
+        transform: translateX(0);
+    }
+}
+
+/* Móviles (480px y menos) */
+@media (max-width: 480px) {
+    .sidebar-header h2 {
+        font-size: 1.2rem;
+    }
+
+    .sidebar-item {
+        padding: 0.875rem 1rem;
+    }
+
+    .sidebar-label {
+        font-size: 0.9rem;
+    }
+}
+
+/* Print Styles */
+@media print {
+    .sidebar {
+        display: none !important;
+    }
+}

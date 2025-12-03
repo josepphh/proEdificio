@@ -1,0 +1,141 @@
+/* ============================================
+   LAYOUT & RESPONSIVE STYLES
+   Extracted from sidebar.css
+   ============================================ */
+
+:root {
+    /* Dimensiones Globales */
+    --sidebar-width: 250px;
+    --sidebar-collapsed-width: 70px;
+    --top-header-height: 60px;
+
+    /* Z-Index */
+    --z-fixed: 100;
+    --z-sticky: 90;
+}
+
+/* ============================================
+   LAYOUT PRINCIPAL
+   ============================================ */
+body.admin-layout {
+    display: flex;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+/* Main Wrapper (contenido + header) */
+.main-wrapper {
+    flex: 1;
+    margin-left: var(--sidebar-width);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Main Content */
+.main-content {
+    flex: 1;
+    padding: 2rem;
+    background: var(--color-gray-50);
+    min-height: calc(100vh - var(--top-header-height));
+}
+
+/* ============================================
+   HAMBURGER MENU (Móvil)
+   ============================================ */
+.sidebar-toggle {
+    display: none;
+    background: transparent;
+    border: none;
+    font-size: 1.5rem;
+    color: #1e293b;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+}
+
+.sidebar-toggle:hover {
+    background: rgba(0, 0, 0, 0.05);
+    transform: scale(1.1);
+    color: #0f172a;
+}
+
+/* Overlay para cerrar sidebar en móvil */
+.sidebar-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: calc(var(--z-fixed) - 1);
+    opacity: 0;
+    transition: opacity var(--transition-normal);
+}
+
+.sidebar-overlay.active {
+    opacity: 1;
+}
+
+/* ============================================
+   RESPONSIVE DESIGN (Layout Logic)
+   ============================================ */
+
+/* Tablets (1024px y menos) */
+@media (max-width: 1024px) {
+    :root {
+        --sidebar-width: 220px;
+    }
+
+    .main-content {
+        padding: 1.5rem;
+    }
+}
+
+/* Tablets pequeñas (768px y menos) */
+@media (max-width: 768px) {
+
+    /* Mostrar botón hamburger */
+    .sidebar-toggle {
+        display: block;
+    }
+
+    /* Main wrapper ocupa todo el ancho */
+    .main-wrapper {
+        margin-left: 0;
+    }
+
+    /* Mostrar overlay cuando sidebar está activo */
+    body.sidebar-open .sidebar-overlay {
+        display: block;
+    }
+
+    /* Prevenir scroll del body cuando sidebar está abierto */
+    body.sidebar-open {
+        overflow: hidden;
+    }
+
+    .main-content {
+        padding: 1rem;
+    }
+}
+
+/* ============================================
+   PRINT STYLES
+   ============================================ */
+@media print {
+    .sidebar-toggle {
+        display: none !important;
+    }
+
+    .main-wrapper {
+        margin-left: 0 !important;
+    }
+
+    .main-content {
+        padding: 0 !important;
+    }
+}

@@ -1,0 +1,335 @@
+/* ============================================
+   SISTEMA DE TEMAS - CLARO Y OSCURO
+   ============================================ */
+
+/* TEMA POR DEFECTO (Ya definido en main.css) */
+/* Este es el tema actual con gradientes morado/azul */
+
+/* ============================================
+   TEMA CLARO (Light Theme)
+   ============================================ */
+[data-theme="light"] {
+    /* Colores Primarios - Azul Cielo */
+    --color-primary: #2196F3;
+    --color-primary-dark: #1976D2;
+    --color-primary-light: #64B5F6;
+    --gradient-primary: linear-gradient(135deg, #2196F3 0%, #1976D2 100%);
+    
+    /* Colores Secundarios - Azul Turquesa */
+    --color-secondary: #00BCD4;
+    --color-secondary-dark: #0097A7;
+    --color-secondary-light: #4DD0E1;
+    --gradient-secondary: linear-gradient(135deg, #00BCD4 0%, #00ACC1 100%);
+    
+    /* Color de Énfasis - Verde Menta */
+    --color-accent: #4CAF50;
+    --color-accent-dark: #388E3C;
+    --gradient-accent: linear-gradient(135deg, #4CAF50 0%, #66BB6A 100%);
+    
+    /* Color de Título Principal */
+    --color-title: #1565C0;
+    
+    /* Colores de Fondo */
+    --color-background: #ffffff;
+    --color-background-secondary: #f5f7fa;
+    --color-background-tertiary: #e8eef5;
+    
+    /* Colores de Texto */
+    --color-text-primary: #2c3e50;
+    --color-text-secondary: #546e7a;
+    --color-text-muted: #78909c;
+    
+    /* Bordes */
+    --color-border: #cfd8dc;
+    --color-border-light: #eceff1;
+    
+    /* Sombras más suaves para tema claro */
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
+    --shadow-md: 0 2px 6px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 4px 12px rgba(0, 0, 0, 0.12);
+    --shadow-xl: 0 6px 16px rgba(0, 0, 0, 0.15);
+    --shadow-2xl: 0 8px 24px rgba(0, 0, 0, 0.18);
+}
+
+[data-theme="light"] header {
+    background: linear-gradient(135deg, #2196F3 0%, #1976D2 100%);
+}
+
+[data-theme="light"] .header-links button {
+    color: var(--color-white);
+}
+
+[data-theme="light"] .header-links button.active {
+    background: var(--color-white);
+    color: #2196F3;
+}
+
+/* Menú móvil en tema claro */
+@media (max-width: 768px) {
+    [data-theme="light"] .header-links {
+        background: linear-gradient(135deg, #2196F3 0%, #1976D2 100%);
+    }
+}
+
+/* ============================================
+   TEMA OSCURO (Dark Theme)
+   ============================================ */
+[data-theme="dark"] {
+    /* Colores Primarios - Azul Eléctrico */
+    --color-primary: #3b82f6;
+    --color-primary-dark: #2563eb;
+    --color-primary-light: #60a5fa;
+    --gradient-primary: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+    
+    /* Colores Secundarios - Cyan */
+    --color-secondary: #06b6d4;
+    --color-secondary-dark: #0891b2;
+    --color-secondary-light: #22d3ee;
+    --gradient-secondary: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%);
+    
+    /* Color de Énfasis - Verde Neón */
+    --color-accent: #10b981;
+    --color-accent-dark: #059669;
+    --gradient-accent: linear-gradient(135deg, #10b981 0%, #34d399 100%);
+    
+    /* Color de Título Principal */
+    --color-title: #60a5fa;
+    
+    /* Colores de Fondo */
+    --color-background: #0f172a;
+    --color-background-secondary: #1e293b;
+    --color-background-tertiary: #334155;
+    
+    /* Colores de Texto */
+    --color-text-primary: #f1f5f9;
+    --color-text-secondary: #cbd5e1;
+    --color-text-muted: #94a3b8;
+    
+    /* Bordes */
+    --color-border: #475569;
+    --color-border-light: #334155;
+    
+    /* Colores Neutros Ajustados */
+    --color-white: #0f172a;
+    --color-gray-50: #1e293b;
+    --color-gray-100: #334155;
+    --color-gray-200: #475569;
+    --color-gray-300: #64748b;
+    --color-gray-400: #94a3b8;
+    --color-gray-500: #cbd5e1;
+    --color-gray-600: #e2e8f0;
+    --color-gray-700: #f1f5f9;
+    --color-gray-800: #f8fafc;
+    
+    /* Colores de Estado para Tema Oscuro */
+    --color-success: #10b981;
+    --color-success-light: #064e3b;
+    --color-success-border: #065f46;
+    --color-success-text: #34d399;
+    
+    --color-danger: #ef4444;
+    --color-danger-light: #7f1d1d;
+    --color-danger-border: #991b1b;
+    --color-danger-text: #fca5a5;
+    
+    --color-warning: #f59e0b;
+    --color-warning-light: #78350f;
+    --color-warning-border: #92400e;
+    --color-warning-text: #fbbf24;
+    
+    --color-info: #06b6d4;
+    --color-info-light: #164e63;
+    --color-info-border: #155e75;
+    --color-info-text: #67e8f9;
+    
+    /* Sombras más intensas para tema oscuro */
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.5);
+    --shadow-md: 0 2px 6px rgba(0, 0, 0, 0.6);
+    --shadow-lg: 0 4px 12px rgba(0, 0, 0, 0.7);
+    --shadow-xl: 0 6px 16px rgba(0, 0, 0, 0.8);
+    --shadow-2xl: 0 8px 24px rgba(0, 0, 0, 0.9);
+}
+
+/* ============================================
+   ESTILOS ESPECÍFICOS PARA TEMA OSCURO
+   ============================================ */
+
+[data-theme="dark"] body {
+    background: var(--color-background);
+    color: var(--color-text-primary);
+}
+
+[data-theme="dark"] header {
+    background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+}
+
+[data-theme="dark"] .header-links button {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.1);
+    color: var(--color-text-primary);
+}
+
+[data-theme="dark"] .header-links button:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--color-white);
+}
+
+[data-theme="dark"] .header-links button.active {
+    background: var(--gradient-primary);
+    color: var(--color-white);
+}
+
+/* Menú móvil en tema oscuro */
+@media (max-width: 768px) {
+    [data-theme="dark"] .header-links {
+        background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+    }
+}
+
+[data-theme="dark"] .section-white {
+    background: var(--color-background-secondary);
+    color: var(--color-text-primary);
+}
+
+[data-theme="dark"] .card,
+[data-theme="dark"] .modal-content {
+    background: var(--color-background-secondary);
+    color: var(--color-text-primary);
+    border-color: var(--color-border);
+}
+
+[data-theme="dark"] input,
+[data-theme="dark"] select,
+[data-theme="dark"] textarea {
+    background: var(--color-background-tertiary);
+    color: var(--color-text-primary);
+    border-color: var(--color-border);
+}
+
+[data-theme="dark"] input::placeholder {
+    color: var(--color-text-muted);
+}
+
+[data-theme="dark"] table {
+    color: var(--color-text-primary);
+}
+
+[data-theme="dark"] table thead {
+    background: var(--color-background-tertiary);
+}
+
+[data-theme="dark"] table tbody tr {
+    border-bottom-color: var(--color-border-light);
+}
+
+[data-theme="dark"] table tbody tr:hover {
+    background: var(--color-background-tertiary);
+}
+
+[data-theme="dark"] .stats-grid .stat-card {
+    background: var(--color-background-secondary);
+    border-color: var(--color-border);
+}
+
+/* ============================================
+   SELECTOR DE TEMA
+   ============================================ */
+
+.theme-switcher {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    z-index: 999;
+    display: flex;
+    gap: 0.5rem;
+    background: var(--color-white);
+    padding: 0.5rem;
+    border-radius: var(--border-radius-full);
+    box-shadow: var(--shadow-xl);
+    border: 2px solid var(--color-gray-200);
+}
+
+[data-theme="dark"] .theme-switcher {
+    background: var(--color-background-secondary);
+    border-color: var(--color-border);
+}
+
+.theme-btn {
+    width: 40px;
+    height: 40px;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+    transition: all var(--transition-fast);
+    position: relative;
+    background: var(--color-gray-100);
+}
+
+[data-theme="dark"] .theme-btn {
+    background: var(--color-background-tertiary);
+}
+
+.theme-btn:hover {
+    transform: scale(1.1);
+    box-shadow: var(--shadow-md);
+}
+
+.theme-btn.active {
+    background: var(--gradient-primary);
+    color: white;
+    box-shadow: var(--shadow-lg);
+}
+
+.theme-btn.active::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 6px;
+    height: 6px;
+    background: var(--color-primary);
+    border-radius: 50%;
+}
+
+/* Tooltip para los botones */
+.theme-btn::before {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: calc(100% + 10px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--color-gray-800);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: var(--border-radius-md);
+    font-size: var(--font-size-sm);
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity var(--transition-fast);
+    z-index: 1000;
+}
+
+.theme-btn:hover::before {
+    opacity: 1;
+}
+
+/* Animación de transición entre temas */
+body {
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.section-white,
+.card,
+.modal-content,
+input,
+select,
+textarea,
+table {
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}

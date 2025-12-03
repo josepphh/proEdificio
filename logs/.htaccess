@@ -1,0 +1,7 @@
+# Protección del directorio de logs
+# Denegar TODO acceso directo
+
+Order Deny,Allow
+Deny from all
+
+# Los logs solo deben ser accesibles desde scripts PHP del servidor
