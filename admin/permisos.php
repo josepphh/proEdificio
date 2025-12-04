@@ -12,6 +12,9 @@ $pageTitle = "🔐 Permisos por Rol";
 $useAdminLayout = true;
 include '../includes/header.php';
 include '../includes/admin_layout_start.php';
+?>
+<link rel="stylesheet" href="../css/modal-styles.css">
+<?php
 
 $database = new Database();
 $conn = $database->getConnection();

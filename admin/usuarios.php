@@ -12,6 +12,9 @@ $pageTitle = "👥 Gestión de Usuarios";
 $useAdminLayout = true;
 include '../includes/header.php';
 include '../includes/admin_layout_start.php';
+?>
+<link rel="stylesheet" href="../css/modal-styles.css">
+<?php
 
 // Obtener lista de usuarios, roles y edificios
 $database = new Database();

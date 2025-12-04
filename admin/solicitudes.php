@@ -16,6 +16,9 @@ $pageTitle = "📝 Solicitudes de Acceso";
 $useAdminLayout = true;
 include '../includes/header.php';
 include '../includes/admin_layout_start.php';
+?>
+<link rel="stylesheet" href="../css/modal-styles.css">
+<?php
 require_once '../config/constants.php';
 
 
@@ -63,7 +66,7 @@ $conn->close();
         <label for="filtroEstado" style="font-weight: 600; color: var(--color-gray-700);">
             🔍 Filtrar por estado:
         </label>
-        <select id="filtroEstado" onchange="filtrarSolicitudes()" class="form-control" style="max-width: 250px;">
+        <select id="filtroEstado" onchange="filtrarSolicitudes()" style="width: 300px;">
             <option value="TODAS">Todas las solicitudes</option>
             <option value="<?php echo SOLICITUD_PENDIENTE; ?>" selected>Solo Pendientes</option>
             <option value="<?php echo SOLICITUD_APROBADA; ?>">Solo Aprobadas</option>

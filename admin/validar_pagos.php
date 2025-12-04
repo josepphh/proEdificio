@@ -11,6 +11,9 @@ $pageTitle = "✅ Validar Pagos";
 $useAdminLayout = true;
 include '../includes/header.php';
 include '../includes/admin_layout_start.php';
+?>
+<link rel="stylesheet" href="../css/modal-styles.css">
+<?php
 
 
 $database = new Database();
@@ -203,14 +206,14 @@ window.validarPago = async function(pagoId, nuevoEstado) {
         const data = await response.json();
         
         if (data.success) {
-            alert(data.message);
+            showToast(data.message, 'success');
             location.reload();
         } else {
-            alert('Error: ' + data.message);
+            showToast('Error: ' + data.message, 'error');
         }
     } catch (error) {
         console.error('Error:', error);
-        alert('Error al validar el pago');
+        showToast('Error al validar el pago', 'error');
     }
 }
 })();

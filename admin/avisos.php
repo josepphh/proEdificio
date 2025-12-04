@@ -11,6 +11,9 @@ $pageTitle = "📢 Gestión de Avisos";
 $useAdminLayout = true;
 include '../includes/header.php';
 include '../includes/admin_layout_start.php';
+?>
+<link rel="stylesheet" href="../css/modal-styles.css">
+<?php
 
 
 // Obtener edificios según el rol del usuario
@@ -53,8 +56,8 @@ $conn->close();
     <div class="container">
         <h2 class="section-title">📢 Gestión de Avisos</h2>
         
-        <div class="avisos-header">
-            <button onclick="nuevoAviso()" class="btn btn-primary">+ Nuevo Aviso</button>
+        <div class="avisos-header" style="margin-bottom: 1rem;">
+            <button onclick="nuevoAviso()" class="btn btn-primary" style="margin-bottom: 1rem;">+ Nuevo Aviso</button>
             <div class="d-flex gap-2">
                 <select id="filtroTipo" onchange="filtrarAvisos()" class="form-select">
                     <option value="">Todos los tipos</option>
@@ -229,11 +232,11 @@ $conn->close();
             avisosData = data.avisos;
             mostrarAvisos(avisosData);
         } else {
-            alert('Error al cargar avisos: ' + data.message);
+            showToast('Error al cargar avisos: ' + data.message, 'error');
         }
     } catch (error) {
         console.error('Error:', error);
-        alert('Error al cargar avisos');
+        showToast('Error al cargar avisos', 'error');
     }
     }
 
@@ -305,11 +308,11 @@ $conn->close();
             document.getElementById('fecha_vencimiento').value = aviso.fecha_vencimiento || '';
             document.getElementById('modalAviso').style.display = 'block';
         } else {
-            alert('Error al cargar aviso: ' + data.message);
+            showToast('Error al cargar aviso: ' + data.message, 'error');
         }
     } catch (error) {
         console.error('Error:', error);
-        alert('Error al cargar aviso');
+        showToast('Error al cargar aviso', 'error');
         }
     }
 
@@ -329,15 +332,15 @@ $conn->close();
         const data = await response.json();
         
         if (data.success) {
-            alert(data.message);
+            showToast(data.message, 'success');
             cerrarModal();
             cargarAvisos();
         } else {
-            alert('Error: ' + data.message);
+            showToast('Error: ' + data.message, 'error');
         }
     } catch (error) {
         console.error('Error:', error);
-        alert('Error al guardar aviso');
+        showToast('Error al guardar aviso', 'error');
         }
     }
 
@@ -361,14 +364,14 @@ $conn->close();
         const data = await response.json();
         
         if (data.success) {
-            alert(data.message);
+            showToast(data.message, 'success');
             cargarAvisos();
         } else {
-            alert('Error: ' + data.message);
+            showToast('Error: ' + data.message, 'error');
         }
     } catch (error) {
         console.error('Error:', error);
-        alert('Error al eliminar aviso');
+        showToast('Error al eliminar aviso', 'error');
         }
     }
 

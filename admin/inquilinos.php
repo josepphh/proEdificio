@@ -12,6 +12,9 @@ $pageTitle = "🏘️ Gestión de Inquilinos";
 $useAdminLayout = true;
 include '../includes/header.php';
 include '../includes/admin_layout_start.php';
+?>
+<link rel="stylesheet" href="../css/modal-styles.css">
+<?php
 
 
 $database = new Database();
@@ -413,10 +416,10 @@ window.verDetalleInquilino = async function(usuario_id) {
             
             document.getElementById('modalDetalle').style.display = 'block';
         } else {
-            alert('Error al cargar datos del inquilino');
+            showToast('Error al cargar datos del inquilino', 'error');
         }
     } catch (error) {
-        alert('Error de conexión: ' + error.message);
+        showToast('Error de conexión: ' + error.message, 'error');
     }
 }
 
@@ -437,10 +440,10 @@ window.editarInquilino = async function(usuario_id) {
             // Mostrar modal
             document.getElementById('modalEditar').style.display = 'block';
         } else {
-            alert('Error al cargar datos del inquilino');
+            showToast('Error al cargar datos del inquilino', 'error');
         }
     } catch (error) {
-        alert('Error de conexión: ' + error.message);
+        showToast('Error de conexión: ' + error.message, 'error');
     }
 }
 
@@ -460,14 +463,14 @@ window.guardarInquilino = async function(event) {
         const result = await response.json();
         
         if (result.success) {
-            alert('Inquilino actualizado exitosamente');
+            showToast('Inquilino actualizado exitosamente', 'success');
             cerrarModalEditar();
             location.reload();
         } else {
-            alert('Error: ' + result.message);
+            showToast('Error: ' + result.message, 'error');
         }
     } catch (error) {
-        alert('Error de conexión: ' + error.message);
+        showToast('Error de conexión: ' + error.message, 'error');
     }
 }
 
@@ -491,13 +494,13 @@ window.desactivarInquilino = async function(usuario_id) {
         const result = await response.json();
         
         if (result.success) {
-            alert('Inquilino desactivado exitosamente');
+            showToast('Inquilino desactivado exitosamente', 'success');
             location.reload();
         } else {
-            alert('Error: ' + result.message);
+            showToast('Error: ' + result.message, 'error');
         }
     } catch (error) {
-        alert('Error de conexión: ' + error.message);
+        showToast('Error de conexión: ' + error.message, 'error');
     }
 }
 
@@ -523,13 +526,13 @@ window.activarInquilino = async function(usuario_id) {
         const result = await response.json();
         
         if (result.success) {
-            alert('Inquilino activado exitosamente');
+            showToast('Inquilino activado exitosamente', 'success');
             location.reload();
         } else {
-            alert('Error: ' + result.message);
+            showToast('Error: ' + result.message, 'error');
         }
     } catch (error) {
-        alert('Error de conexión: ' + error.message);
+        showToast('Error de conexión: ' + error.message, 'error');
     }
 }
 

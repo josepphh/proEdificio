@@ -11,6 +11,9 @@ $pageTitle = "🔧 Gestión de Incidencias";
 $useAdminLayout = true;
 include '../includes/header.php';
 include '../includes/admin_layout_start.php';
+?>
+<link rel="stylesheet" href="../css/modal-styles.css">
+<?php
 
 
 $database = new Database();
@@ -449,14 +452,14 @@ window.cambiarEstado = async function(incidenciaId, nuevoEstado) {
         const data = await response.json();
         
         if (data.success) {
-            alert(data.message);
+            showToast(data.message, 'success');
             location.reload();
         } else {
-            alert('Error: ' + data.message);
+            showToast('Error: ' + data.message, 'error');
         }
     } catch (error) {
         console.error('Error:', error);
-        alert('Error al cambiar el estado');
+        showToast('Error al cambiar el estado', 'error');
     }
 }
 
@@ -465,7 +468,7 @@ window.agregarComentario = async function(incidenciaId) {
     const comentario = textarea.value.trim();
     
     if (!comentario) {
-        alert('Por favor escribe un comentario');
+        showToast('Por favor escribe un comentario', 'warning');
         return;
     }
     
@@ -486,11 +489,11 @@ window.agregarComentario = async function(incidenciaId) {
             // Recargar detalles
             verDetalleIncidencia(incidenciaId);
         } else {
-            alert('Error: ' + data.message);
+            showToast('Error: ' + data.message, 'error');
         }
     } catch (error) {
         console.error('Error:', error);
-        alert('Error al agregar comentario');
+        showToast('Error al agregar comentario', 'error');
     }
 }
 

@@ -12,6 +12,9 @@ $pageTitle = "🔑 Gestión de Roles";
 $useAdminLayout = true;
 include '../includes/header.php';
 include '../includes/admin_layout_start.php';
+?>
+<link rel="stylesheet" href="../css/modal-styles.css">
+<?php
 
 
 // Obtener lista de TODOS los roles (activos e inactivos) con conteo de usuarios ACTIVOS
@@ -229,11 +232,11 @@ window.editarRol = async function(id) {
             
             document.getElementById('modalRol').style.display = 'block';
         } else {
-            alert('Error: ' + data.message);
+            showToast('Error: ' + data.message, 'error');
         }
     } catch (error) {
         console.error('Error:', error);
-        alert('Error al cargar los datos del rol');
+        showToast('Error al cargar los datos del rol', 'error');
     }
 }
 
@@ -254,15 +257,15 @@ window.guardarRol = async function(event) {
         const data = await response.json();
         
         if (data.success) {
-            alert(data.message);
+            showToast(data.message, 'success');
             cerrarModal();
             location.reload();
         } else {
-            alert('Error: ' + data.message);
+            showToast('Error: ' + data.message, 'error');
         }
     } catch (error) {
         console.error('Error:', error);
-        alert('Error al guardar el rol');
+        showToast('Error al guardar el rol', 'error');
     }
     
     return false;
@@ -302,14 +305,14 @@ window.eliminarRol = async function(id, totalUsuarios) {
         const data = await response.json();
         
         if (data.success) {
-            alert(data.message);
+            showToast(data.message, 'success');
             location.reload();
         } else {
-            alert('Error: ' + data.message);
+            showToast('Error: ' + data.message, 'error');
         }
     } catch (error) {
         console.error('Error:', error);
-        alert('Error al desactivar el rol');
+        showToast('Error al desactivar el rol', 'error');
     }
 }
 
@@ -336,14 +339,14 @@ window.restaurarRol = async function(id) {
         const data = await response.json();
         
         if (data.success) {
-            alert(data.message);
+            showToast(data.message, 'success');
             location.reload();
         } else {
-            alert('Error: ' + data.message);
+            showToast('Error: ' + data.message, 'error');
         }
     } catch (error) {
         console.error('Error:', error);
-        alert('Error al restaurar el rol');
+        showToast('Error al restaurar el rol', 'error');
     }
 }
 
