@@ -18,6 +18,8 @@ $base_path = str_repeat('../', max(0, $depth));
     <title><?php echo $title; ?></title>
     <link rel="stylesheet" href="<?php echo $base_path; ?>assets/css/main.css">
     <link rel="stylesheet" href="<?php echo $base_path; ?>assets/css/themes.css">
+    <link rel="stylesheet" href="<?php echo $base_path; ?>css/modal-dark-mode.css?v=2.0">
+    <link rel="stylesheet" href="<?php echo $base_path; ?>css/admin-dark-mode.css?v=2.0">
     <?php if (isset($useAdminLayout) && $useAdminLayout): ?>
     <link rel="stylesheet" href="<?php echo $base_path; ?>assets/css/sidebar.css">
     <link rel="stylesheet" href="<?php echo $base_path; ?>assets/css/layout.css">

@@ -221,5 +221,4 @@ window.validarPago = async function(pagoId, nuevoEstado) {
 
 <?php
 include '../includes/admin_layout_end.php';
-include '../includes/footer.php';
-?>
+

@@ -13,6 +13,8 @@ include '../includes/header.php';
 include '../includes/admin_layout_start.php';
 ?>
 <link rel="stylesheet" href="../css/modal-styles.css">
+<link rel="stylesheet" href="../css/modal-dark-mode.css">
+<link rel="stylesheet" href="../css/admin-dark-mode.css">
 <?php
 
 
@@ -508,5 +510,4 @@ window.cerrarModalIncidencia = function() {
 
 <?php
 include '../includes/admin_layout_end.php';
-include '../includes/footer.php';
-?>
+

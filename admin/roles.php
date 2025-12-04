@@ -458,5 +458,4 @@ window.toggleInactivos = function() {
 $conn->close();
 include '../includes/admin_layout_end.php';
 include '../includes/admin_layout_end.php';
-include '../includes/footer.php';
-?>
+

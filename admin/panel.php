@@ -105,5 +105,4 @@ include '../includes/admin_layout_start.php';
 
 <?php 
 include '../includes/admin_layout_end.php';
-include '../includes/footer.php'; 
-?>
+

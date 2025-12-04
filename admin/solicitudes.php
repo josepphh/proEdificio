@@ -294,6 +294,4 @@ window.procesarRechazo = async function(event) {
 })();
 </script>
 
-<?php include '../includes/admin_layout_end.php';
-include '../includes/admin_layout_end.php';
-include '../includes/footer.php'; ?>
+<?php include '../includes/admin_layout_end.php'; ?>

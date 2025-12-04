@@ -303,5 +303,5 @@ function mostrarMensaje(mensaje, tipo) {
 
 <?php include '../includes/admin_layout_end.php';
 include '../includes/admin_layout_end.php';
-include '../includes/footer.php'; ?>
+
 

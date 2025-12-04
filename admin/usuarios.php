@@ -1096,5 +1096,4 @@ window.cerrarModal = function() {
 <?php
 include '../includes/admin_layout_end.php';
 $conn->close();
-include '../includes/footer.php';
-?>
+
