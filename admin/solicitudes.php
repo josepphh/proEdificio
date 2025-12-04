@@ -75,102 +75,468 @@ $conn->close();
     </div>
 
     <?php if (count($solicitudes) === 0): ?>
-        <div style="text-align: center; padding: 3rem; background: white; border-radius: 12px;">
-            <p style="font-size: 1.2rem; color: #666;">📭 No hay solicitudes de acceso aún</p>
+        <div class="empty-state">
+            <div style="font-size: 4rem; margin-bottom: 1rem;">📭</div>
+            <h3 style="margin: 0 0 0.5rem 0;">No hay solicitudes de acceso</h3>
+            <p style="margin: 0; color: var(--color-gray-500);">Las nuevas solicitudes aparecerán aquí</p>
         </div>
     <?php else: ?>
-        <div class="solicitudes-grid" style="display: grid; gap: 1.5rem;">
+        <div class="solicitudes-grid">
             <?php foreach ($solicitudes as $solicitud): ?>
-                <div class="solicitud-card" style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); border-left: 5px solid <?php 
-                    echo strtoupper($solicitud['estado']) === SOLICITUD_PENDIENTE ? '#ffc107' : 
-                        (strtoupper($solicitud['estado']) === SOLICITUD_APROBADA ? '#28a745' : '#dc3545'); 
-                ?>;">
-                    <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
-                        <div style="flex: 1;">
-                            <h3 style="margin: 0 0 0.5rem 0; color: #333; font-size: 1.4rem;">
-                                🏢 <?php echo htmlspecialchars($solicitud['nombre_edificio']); ?>
-                            </h3>
-                            <p style="margin: 0; color: #666;">
-                                👤 <strong><?php echo htmlspecialchars($solicitud['nombre_completo']); ?></strong>
-                            </p>
+                <?php
+                $isPendiente = strtoupper($solicitud['estado']) === SOLICITUD_PENDIENTE;
+                $isAprobada = strtoupper($solicitud['estado']) === SOLICITUD_APROBADA;
+                $isRechazada = strtoupper($solicitud['estado']) === SOLICITUD_RECHAZADA;
+                
+                $statusIcon = $isPendiente ? '⏳' : ($isAprobada ? '✅' : '❌');
+                $statusClass = $isPendiente ? 'status-pendiente' : ($isAprobada ? 'status-aprobada' : 'status-rechazada');
+                ?>
+                
+                <div class="solicitud-card-v2" data-estado="<?php echo $solicitud['estado']; ?>">
+                    <!-- Header con estado y edificio -->
+                    <div class="card-header-v2">
+                        <div class="status-badge-v2 <?php echo $statusClass; ?>">
+                            <span class="status-icon-v2"><?php echo $statusIcon; ?></span>
+                            <span class="status-text-v2"><?php echo $solicitud['estado']; ?></span>
                         </div>
-                        <span style="padding: 0.5rem 1rem; border-radius: 20px; font-weight: 600; font-size: 0.9rem; <?php 
-                            echo strtoupper($solicitud['estado']) === SOLICITUD_PENDIENTE ? 'background: #fff3cd; color: #856404;' : 
-                                (strtoupper($solicitud['estado']) === SOLICITUD_APROBADA ? 'background: #d4edda; color: #155724;' : 'background: #f8d7da; color: #721c24;'); 
-                        ?>">
-                            <?php echo $solicitud['estado']; ?>
-                        </span>
+                        <div class="edificio-badge-v2">
+                            <span class="edificio-icon-v2">🏢</span>
+                            <span class="edificio-nombre-v2"><?php echo htmlspecialchars($solicitud['nombre_edificio']); ?></span>
+                        </div>
                     </div>
                     
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 1.5rem;">
-                        <div>
-                            <p style="margin: 0 0 0.25rem 0; color: #999; font-size: 0.9rem;">📧 Email</p>
-                            <p style="margin: 0; color: #333; font-weight: 500;"><?php echo htmlspecialchars($solicitud['email']); ?></p>
+                    <!-- Solicitante destacado -->
+                    <div class="solicitante-section-v2">
+                        <div class="solicitante-label-v2">
+                            <span class="solicitante-icon-v2">👤</span>
+                            <span>SOLICITANTE</span>
                         </div>
-                        <div>
-                            <p style="margin: 0 0 0.25rem 0; color: #999; font-size: 0.9rem;">📱 Teléfono</p>
-                            <p style="margin: 0; color: #333; font-weight: 500;"><?php echo htmlspecialchars($solicitud['telefono']); ?></p>
+                        <div class="solicitante-nombre-v2">
+                            <?php echo htmlspecialchars($solicitud['nombre_completo']); ?>
                         </div>
+                    </div>
+                    
+                    <!-- Grid de información -->
+                    <div class="info-grid-v2">
+                        <div class="info-item-v2">
+                            <div class="info-icon-box-v2">📧</div>
+                            <div class="info-content-v2">
+                                <div class="info-label-v2">EMAIL</div>
+                                <div class="info-value-v2"><?php echo htmlspecialchars($solicitud['email']); ?></div>
+                            </div>
+                        </div>
+                        
+                        <div class="info-item-v2">
+                            <div class="info-icon-box-v2">📱</div>
+                            <div class="info-content-v2">
+                                <div class="info-label-v2">TELÉFONO</div>
+                                <div class="info-value-v2"><?php echo htmlspecialchars($solicitud['telefono']); ?></div>
+                            </div>
+                        </div>
+                        
                         <?php if ($solicitud['num_departamentos']): ?>
-                        <div>
-                            <p style="margin: 0 0 0.25rem 0; color: #999; font-size: 0.9rem;">🚪 Departamentos</p>
-                            <p style="margin: 0; color: #333; font-weight: 500;"><?php echo $solicitud['num_departamentos']; ?></p>
+                        <div class="info-item-v2">
+                            <div class="info-icon-box-v2">🚪</div>
+                            <div class="info-content-v2">
+                                <div class="info-label-v2">DEPARTAMENTOS</div>
+                                <div class="info-value-v2"><?php echo $solicitud['num_departamentos']; ?></div>
+                            </div>
                         </div>
                         <?php endif; ?>
+                        
+                        <div class="info-item-v2">
+                            <div class="info-icon-box-v2">📅</div>
+                            <div class="info-content-v2">
+                                <div class="info-label-v2">FECHA SOLICITUD</div>
+                                <div class="info-value-v2"><?php echo date('d/m/Y H:i', strtotime($solicitud['fecha_solicitud'])); ?></div>
+                            </div>
+                        </div>
                     </div>
                     
                     <?php if ($solicitud['direccion_edificio']): ?>
-                    <div style="margin-bottom: 1rem;">
-                        <p style="margin: 0 0 0.25rem 0; color: #999; font-size: 0.9rem;">📍 Dirección</p>
-                        <p style="margin: 0; color: #333;"><?php echo htmlspecialchars($solicitud['direccion_edificio']); ?></p>
+                    <div class="direccion-v2">
+                        <div class="info-icon-box-v2">📍</div>
+                        <div class="info-content-v2">
+                            <div class="info-label-v2">DIRECCIÓN</div>
+                            <div class="info-value-v2"><?php echo htmlspecialchars($solicitud['direccion_edificio']); ?></div>
+                        </div>
                     </div>
                     <?php endif; ?>
                     
                     <?php if ($solicitud['mensaje']): ?>
-                    <div style="margin-bottom: 1.5rem; padding: 1rem; background: #f8f9fa; border-radius: 8px;">
-                        <p style="margin: 0 0 0.5rem 0; color: #999; font-size: 0.9rem;">💬 Mensaje</p>
-                        <p style="margin: 0; color: #666; white-space: pre-line;"><?php echo htmlspecialchars($solicitud['mensaje']); ?></p>
+                    <div class="mensaje-v2">
+                        <div class="mensaje-header-v2">
+                            <span class="mensaje-icon-v2">💬</span>
+                            <span>MENSAJE DEL SOLICITANTE</span>
+                        </div>
+                        <div class="mensaje-content-v2">
+                            <?php echo nl2br(htmlspecialchars($solicitud['mensaje'])); ?>
+                        </div>
                     </div>
                     <?php endif; ?>
                     
-                    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; padding-top: 1rem; border-top: 1px solid #e0e0e0;">
-                        <small style="color: #999;">
-                            📅 Solicitado: <?php echo date('d/m/Y H:i', strtotime($solicitud['fecha_solicitud'])); ?>
-                        </small>
-                        
-                        <?php if (strtoupper($solicitud['estado']) === SOLICITUD_PENDIENTE): ?>
-                        <div style="display: flex; gap: 0.5rem;">
-                            <button onclick="aprobarSolicitud(<?php echo $solicitud['id']; ?>, '<?php echo htmlspecialchars($solicitud['nombre_completo']); ?>', '<?php echo htmlspecialchars($solicitud['email']); ?>')" 
-                                    class="btn-action btn-edit" style="background: #28a745; color: white; border: none; padding: 0.5rem 1rem; border-radius: 6px; cursor: pointer; font-weight: 600;">
-                                ✅ Aprobar
-                            </button>
-                            <button onclick="rechazarSolicitud(<?php echo $solicitud['id']; ?>, '<?php echo htmlspecialchars($solicitud['nombre_completo']); ?>')" 
-                                    class="btn-action btn-delete" style="background: #dc3545; color: white; border: none; padding: 0.5rem 1rem; border-radius: 6px; cursor: pointer; font-weight: 600;">
-                                ❌ Rechazar
-                            </button>
-                        </div>
-                        <?php elseif ($solicitud['fecha_respuesta']): ?>
-                        <small style="color: #666;">
-                            Respondido: <?php echo date('d/m/Y H:i', strtotime($solicitud['fecha_respuesta'])); ?>
-                        </small>
-                        <?php endif; ?>
+                    <!-- Botones de acción -->
+                    <?php if ($isPendiente): ?>
+                    <div class="actions-v2">
+                        <button onclick="aprobarSolicitud(<?php echo $solicitud['id']; ?>, '<?php echo htmlspecialchars($solicitud['nombre_completo']); ?>', '<?php echo htmlspecialchars($solicitud['email']); ?>')" 
+                                class="btn-action btn-edit btn-aprobar-v2">
+                            ✅ Aprobar
+                        </button>
+                        <button onclick="rechazarSolicitud(<?php echo $solicitud['id']; ?>, '<?php echo htmlspecialchars($solicitud['nombre_completo']); ?>')" 
+                                class="btn-action btn-delete btn-rechazar-v2">
+                            ❌ Rechazar
+                        </button>
                     </div>
+                    <?php elseif ($solicitud['fecha_respuesta']): ?>
+                    <div class="fecha-respuesta-v2">
+                        <span class="respuesta-icon-v2">📅</span>
+                        Respondido: <?php echo date('d/m/Y H:i', strtotime($solicitud['fecha_respuesta'])); ?>
+                    </div>
+                    <?php endif; ?>
                     
-                    <?php if (strtoupper($solicitud['estado']) === SOLICITUD_RECHAZADA && !empty($solicitud['respuesta_admin'])): ?>
-                    <div style="margin-top: 1rem; padding: 1rem; background: #fff3cd; border-left: 4px solid #ffc107; border-radius: 6px;">
-                        <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
-                            <span style="font-size: 1.2rem;">💬</span>
-                            <strong style="color: #856404;">Motivo del rechazo:</strong>
+                    <!-- Motivo de rechazo -->
+                    <?php if ($isRechazada && !empty($solicitud['respuesta_admin'])): ?>
+                    <div class="motivo-rechazo-v2">
+                        <div class="motivo-header-v2">
+                            <span class="motivo-icon-v2">💬</span>
+                            <span>MOTIVO DEL RECHAZO</span>
                         </div>
-                        <p style="margin: 0; color: #856404; line-height: 1.5; white-space: pre-line;">
-                            <?php echo htmlspecialchars($solicitud['respuesta_admin']); ?>
-                        </p>
+                        <div class="motivo-content-v2">
+                            <?php echo nl2br(htmlspecialchars($solicitud['respuesta_admin'])); ?>
+                        </div>
                     </div>
                     <?php endif; ?>
                 </div>
             <?php endforeach; ?>
         </div>
     <?php endif; ?>
+
+<style>
+/* Empty State */
+.empty-state {
+    text-align: center;
+    padding: 4rem 2rem;
+    background: var(--color-surface);
+    border-radius: 16px;
+}
+
+/* Solicitudes Grid */
+.solicitudes-grid {
+    display: grid;
+    gap: 2.5rem;
+}
+
+/* Card V2 */
+.solicitud-card-v2 {
+    background: var(--color-surface);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+    border: 1px solid var(--color-border);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.solicitud-card-v2:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.18);
+}
+
+/* Header */
+.card-header-v2 {
+    padding: 1.25rem 1.5rem;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+/* Status Badge */
+.status-badge-v2 {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 0.75rem;
+    letter-spacing: 0.5px;
+}
+
+.status-pendiente {
+    background: #f59e0b;
+    color: #1f2937;
+}
+
+.status-aprobada {
+    background: #10b981;
+    color: white;
+}
+
+.status-rechazada {
+    background: #ef4444;
+    color: white;
+}
+
+.status-icon-v2 {
+    font-size: 1rem;
+}
+
+/* Edificio Badge */
+.edificio-badge-v2 {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: white;
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+.edificio-icon-v2 {
+    font-size: 1.2rem;
+}
+
+/* Solicitante Section */
+.solicitante-section-v2 {
+    padding: 1.25rem 1.5rem;
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.15) 0%, rgba(139, 92, 246, 0.15) 100%);
+}
+
+.solicitante-label-v2 {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: var(--color-text-secondary);
+    margin-bottom: 0.5rem;
+}
+
+.solicitante-icon-v2 {
+    font-size: 1rem;
+}
+
+.solicitante-nombre-v2 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--color-text);
+}
+
+/* Info Grid */
+.info-grid-v2 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1rem;
+    padding: 1.5rem;
+}
+
+.info-item-v2 {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    background: rgba(99, 102, 241, 0.05);
+    padding: 1rem;
+    border-radius: 10px;
+}
+
+.info-icon-box-v2 {
+    font-size: 1.5rem;
+    flex-shrink: 0;
+}
+
+.info-content-v2 {
+    flex: 1;
+    min-width: 0;
+}
+
+.info-label-v2 {
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    color: var(--color-text-secondary);
+    margin-bottom: 0.25rem;
+}
+
+.info-value-v2 {
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: var(--color-text);
+    word-break: break-word;
+}
+
+/* Dirección */
+.direccion-v2 {
+    padding: 1rem 1.5rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    background: rgba(99, 102, 241, 0.05);
+    margin: 0 1.5rem;
+    border-radius: 10px;
+}
+
+/* Mensaje */
+.mensaje-v2 {
+    padding: 1.5rem;
+}
+
+.mensaje-header-v2 {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: var(--color-text-secondary);
+    margin-bottom: 0.75rem;
+}
+
+.mensaje-icon-v2 {
+    font-size: 1rem;
+}
+
+.mensaje-content-v2 {
+    background: rgba(139, 92, 246, 0.08);
+    padding: 1rem;
+    border-left: 3px solid #8b5cf6;
+    border-radius: 8px;
+    line-height: 1.6;
+    color: var(--color-text);
+}
+
+/* Actions */
+.actions-v2 {
+    padding: 1.5rem;
+    display: flex;
+    gap: 0.75rem;
+    justify-content: flex-end;
+}
+
+.btn-aprobar-v2,
+.btn-rechazar-v2 {
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    border: none;
+    font-weight: 600;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    min-width: 140px;
+}
+
+.btn-aprobar-v2 {
+    background: #10b981;
+    color: white;
+}
+
+.btn-aprobar-v2:hover {
+    background: #059669;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+}
+
+.btn-rechazar-v2 {
+    background: #ef4444;
+    color: white;
+}
+
+.btn-rechazar-v2:hover {
+    background: #dc2626;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+}
+
+/* Fecha Respuesta */
+.fecha-respuesta-v2 {
+    padding: 1rem 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--color-text-secondary);
+    font-size: 0.875rem;
+    background: rgba(0,0,0,0.02);
+}
+
+.respuesta-icon-v2 {
+    font-size: 1rem;
+}
+
+/* Motivo Rechazo */
+.motivo-rechazo-v2 {
+    padding: 1.5rem;
+    background: rgba(239, 68, 68, 0.08);
+}
+
+.motivo-header-v2 {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: #dc2626;
+    margin-bottom: 0.75rem;
+}
+
+.motivo-icon-v2 {
+    font-size: 1rem;
+}
+
+.motivo-content-v2 {
+    background: rgba(255,255,255,0.5);
+    padding: 1rem;
+    border-left: 3px solid #ef4444;
+    border-radius: 8px;
+    line-height: 1.6;
+    color: #991b1b;
+}
+
+/* Dark Mode */
+[data-theme="dark"] .card-header-v2 {
+    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+}
+
+[data-theme="dark"] .solicitante-section-v2 {
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.2) 0%, rgba(139, 92, 246, 0.2) 100%);
+}
+
+[data-theme="dark"] .info-item-v2 {
+    background: rgba(99, 102, 241, 0.1);
+}
+
+[data-theme="dark"] .direccion-v2 {
+    background: rgba(99, 102, 241, 0.1);
+}
+
+[data-theme="dark"] .mensaje-content-v2 {
+    background: rgba(139, 92, 246, 0.15);
+    border-left-color: #a78bfa;
+}
+
+[data-theme="dark"] .fecha-respuesta-v2 {
+    background: rgba(255,255,255,0.03);
+}
+
+[data-theme="dark"] .motivo-rechazo-v2 {
+    background: rgba(239, 68, 68, 0.15);
+}
+
+[data-theme="dark"] .motivo-content-v2 {
+    background: rgba(0,0,0,0.3);
+    color: #fca5a5;
+}
+
+[data-theme="dark"] .empty-state {
+    background: #1e293b;
+}
+
+/* Light Theme - Header con color diferente */
+[data-theme="light"] .card-header-v2 {
+    background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+}
+</style>
 
 <!-- Modal para Rechazar Solicitud -->
 <div id="modalRechazar" class="modal">
