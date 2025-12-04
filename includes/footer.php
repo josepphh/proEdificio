@@ -44,7 +44,7 @@
     
     <script>
     // Sistema de confirmación personalizado
-    let confirmCallback = null;
+    var confirmCallback = confirmCallback || null;
     
     function showConfirm(message, title = '⚠️ Confirmar Acción', btnText = 'Confirmar', btnClass = 'btn-danger') {
         return new Promise((resolve) => {

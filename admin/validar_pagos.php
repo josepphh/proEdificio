@@ -160,7 +160,8 @@ $conn->close();
 </section>
 
 <script>
-function toggleVerificados() {
+(function() {
+window.toggleVerificados = function() {
     const checkbox = document.getElementById('mostrarVerificados');
     const cards = document.querySelectorAll('.pago-card[data-estado="VERIFICADO"], .pago-card[data-estado="RECHAZADO"]');
     
@@ -169,7 +170,7 @@ function toggleVerificados() {
     });
 }
 
-async function validarPago(pagoId, nuevoEstado) {
+window.validarPago = async function(pagoId, nuevoEstado) {
     const accion = nuevoEstado === 'VERIFICADO' ? 'aprobar' : 'rechazar';
     const motivo = nuevoEstado === 'RECHAZADO' ? prompt('Motivo del rechazo (opcional):') : '';
     
@@ -212,6 +213,7 @@ async function validarPago(pagoId, nuevoEstado) {
         alert('Error al validar el pago');
     }
 }
+})();
 </script>
 
 <?php

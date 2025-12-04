@@ -111,7 +111,7 @@ $result = $conn->query($sql);
         </div>
         <div class="modal-footer">
             <button type="button" onclick="cerrarModal()" class="btn btn-light">Cancelar</button>
-            <button type="submit" class="btn btn-success">Guardar</button>
+            <button type="submit" class="btn btn-primary">Guardar</button>
         </div>
         </form>
     </div>

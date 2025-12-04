@@ -91,7 +91,7 @@ $conn->close();
     </div>
     
     <div style="margin-top: 2rem; text-align: center;">
-        <a href="registrar_gastos.php" class="btn-primario" style="text-decoration: none; display: inline-block;">
+        <a href="registrar_gastos.php" class="btn btn-primary" style="text-decoration: none; display: inline-block;">
             Registrar Nuevos Gastos
         </a>
         </div>

@@ -90,19 +90,19 @@ $conn->close();
                         </div>
                         
                         <div class="form-group">
-                            <button type="button" class="btn-eliminar" onclick="eliminarGasto(0)" style="display:none;">Eliminar</button>
+                            <button type="button" class="btn btn-danger" onclick="eliminarGasto(0)" style="display:none;">Eliminar</button>
                         </div>
                     </div>
                 </div>
             </div>
             
             <div style="margin-top: 1rem;">
-                <button type="button" class="btn-secundario" onclick="agregarGasto()">+ Agregar Otro Gasto</button>
+                <button type="button" class="btn btn-secondary" onclick="agregarGasto()">+ Agregar Otro Gasto</button>
             </div>
             
             <div class="form-actions">
-                <button type="submit" class="btn-primario">Guardar y Procesar Cierre</button>
-                <button type="button" class="btn-secundario" onclick="window.history.back();">Cancelar</button>
+                <button type="submit" class="btn btn-primary">Guardar y Procesar Cierre</button>
+                <button type="button" class="btn btn-secondary" onclick="window.history.back();">Cancelar</button>
             </div>
         </form>
     </div>
@@ -197,9 +197,10 @@ $conn->close();
 </style>
 
 <script>
+(function() {
 let gastoIndex = 1;
 
-function agregarGasto() {
+window.agregarGasto = function() {
     const container = document.getElementById('gastos-container');
     const nuevoGasto = document.querySelector('.gasto-item').cloneNode(true);
     nuevoGasto.setAttribute('data-index', gastoIndex);
@@ -221,14 +222,14 @@ function agregarGasto() {
     gastoIndex++;
 }
 
-function eliminarGasto(index) {
+window.eliminarGasto = function(index) {
     const item = document.querySelector(`.gasto-item[data-index="${index}"]`);
     if (item) {
         item.remove();
     }
 }
 
-async function registrarGastos() {
+window.registrarGastos = async function() {
     const form = document.getElementById('formRegistrarGastos');
     const formData = new FormData(form);
     
@@ -294,6 +295,7 @@ function mostrarMensaje(mensaje, tipo) {
         div.style.display = 'none';
     }, 5000);
 }
+})();
 </script>
 
 <?php include '../includes/admin_layout_end.php';

@@ -200,9 +200,9 @@ if ($rol_actual_nombre === 'Administrador Edificio') {
             </table>
         </div>
     </div>
-</section>
 
-<?php include '../includes/admin_layout_end.php'; ?>
+
+
 
 <!-- Estilos específicos de modal inline (temporal) -->
 <style>
@@ -524,12 +524,13 @@ if ($rol_actual_nombre === 'Administrador Edificio') {
 <div id="modalUsuario" class="modal">
     <div class="modal-content">
         <div class="modal-header">
-            <h3 id="modalTitulo">Nuevo Usuario</h3>
+            <h3 id="modalTituloUsuario">Nuevo Usuario</h3>
             <span class="close" onclick="cerrarModal()">&times;</span>
         </div>
         <form id="formUsuario" onsubmit="return guardarUsuario(event)">
         <div class="modal-body">
             <input type="hidden" id="usuario_id" name="usuario_id">
+            <input type="hidden" id="solicitud_id" name="solicitud_id">
             
             <div class="form-group">
                 <label for="nombre">Nombre Completo: <span style="color: red;">*</span></label>
@@ -614,13 +615,15 @@ if ($rol_actual_nombre === 'Administrador Edificio') {
         </div>
         <div class="modal-footer">
             <button type="button" onclick="cerrarModal()" class="btn btn-light">Cancelar</button>
-            <button type="submit" class="btn btn-success">Guardar Usuario</button>
+            <button type="submit" class="btn btn-primary">Guardar Usuario</button>
         </div>
         </form>
     </div>
 </div>
 
+
 <script>
+(function() {
 // Variables globales
 if (typeof modoEdicion === 'undefined') {
     var modoEdicion = false;
@@ -665,7 +668,7 @@ function showToast(message, type = 'info', title = '') {
 }
 
 // Toggle password visibility
-function togglePasswordVisibility(fieldId) {
+window.togglePasswordVisibility = function(fieldId) {
     const field = document.getElementById(fieldId);
     const button = field.nextElementSibling;
     
@@ -679,19 +682,30 @@ function togglePasswordVisibility(fieldId) {
 }
 
 // Configurar listener para cambio de rol
-document.getElementById('rol_id').addEventListener('change', function() {
-    const rolSelect = this;
-    const rolTexto = rolSelect.options[rolSelect.selectedIndex].text;
-    
-    // Mostrar selector de edificios para roles que lo necesitan
-    const necesitaEdificios = ['Administrador Edificio', 'Inquilino', 'Seguridad'].includes(rolTexto);
-    document.getElementById('edificios-multiple-group').style.display = necesitaEdificios ? 'block' : 'none';
-});
+const rolSelect = document.getElementById('rol_id');
+if (rolSelect) {
+    rolSelect.addEventListener('change', function() {
+        const rolTexto = this.options[this.selectedIndex].text;
+        
+        // Mostrar selector de edificios para roles que lo necesitan
+        const necesitaEdificios = ['Administrador Edificio', 'Inquilino', 'Seguridad'].includes(rolTexto);
+        const edificiosGroup = document.getElementById('edificios-multiple-group');
+        if (edificiosGroup) {
+            edificiosGroup.style.display = necesitaEdificios ? 'block' : 'none';
+        }
+    });
+}
 
 // Mostrar modal para nuevo usuario
-function mostrarModalNuevoUsuario() {
+window.mostrarModalNuevoUsuario = function() {
     modoEdicion = false;
-    document.getElementById('modalTitulo').textContent = '👤 Nuevo Usuario';
+    const modalTitulo = document.getElementById('modalTituloUsuario');
+    if (modalTitulo) {
+        modalTitulo.textContent = '👤 Nuevo Usuario';
+    } else {
+        console.error('Error: Elemento modalTituloUsuario no encontrado');
+    }
+    
     document.getElementById('formUsuario').reset();
     document.getElementById('usuario_id').value = '';
     document.getElementById('password').required = true;
@@ -711,9 +725,9 @@ function mostrarModalNuevoUsuario() {
 }
 
 // Editar usuario
-async function editarUsuario(id) {
+window.editarUsuario = async function(id) {
     modoEdicion = true;
-    document.getElementById('modalTitulo').textContent = '✏️ Editar Usuario';
+    document.getElementById('modalTituloUsuario').textContent = '✏️ Editar Usuario';
     document.getElementById('password').required = false;
     document.getElementById('confirm_password').required = false;
     document.getElementById('password-required').style.display = 'none';
@@ -766,7 +780,7 @@ async function editarUsuario(id) {
 }
 
 // Cargar edificios asignados a un usuario
-async function cargarEdificiosAsignados(usuario_id) {
+window.cargarEdificiosAsignados = async function(usuario_id) {
     try {
         const response = await fetch(`/proyectoEdificio/api/asignar_edificios.php?accion=obtener_edificios_usuario&usuario_id=${usuario_id}`);
         const data = await response.json();
@@ -787,7 +801,7 @@ async function cargarEdificiosAsignados(usuario_id) {
 }
 
 // Guardar usuario (crear o actualizar)
-async function guardarUsuario(event) {
+window.guardarUsuario = async function(event) {
     event.preventDefault();
     
     // Validar contraseñas si es modo crear o si se ingresó nueva contraseña
@@ -849,9 +863,39 @@ async function guardarUsuario(event) {
                 const usuario_id = modoEdicion ? document.getElementById('usuario_id').value : data.usuario_id;
                 await asignarEdificios(usuario_id);
             }
+
+            // Si viene de una solicitud de acceso, aprobarla automáticamente
+            const solicitudId = document.getElementById('solicitud_id').value;
+            if (solicitudId && !modoEdicion) {
+                try {
+                    const formApproval = new FormData();
+                    formApproval.append('accion', 'aprobar');
+                    formApproval.append('id', solicitudId);
+                    formApproval.append('usuario_id', data.usuario_id);
+
+                    await fetch('../api/gestionar_solicitud.php', {
+                        method: 'POST',
+                        body: formApproval
+                    });
+                    
+                    showToast('Solicitud aprobada automáticamente', 'success');
+                } catch (e) {
+                    console.error('Error al aprobar solicitud:', e);
+                }
+            }
             
             showToast(data.message, 'success');
             cerrarModal();
+            
+            // Limpiar parámetros de URL si existen
+            if (window.history.replaceState) {
+                const url = new URL(window.location.href);
+                url.searchParams.delete('crear_desde_solicitud');
+                url.searchParams.delete('nombre');
+                url.searchParams.delete('email');
+                window.history.replaceState({}, document.title, url.toString());
+            }
+
             setTimeout(() => location.reload(), 1000);
         } else {
             showToast(data.message, 'error');
@@ -864,8 +908,33 @@ async function guardarUsuario(event) {
     return false;
 }
 
+// Verificar si hay parámetros de solicitud en la URL al cargar
+document.addEventListener('DOMContentLoaded', function() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const solicitudId = urlParams.get('crear_desde_solicitud');
+    
+    if (solicitudId) {
+        mostrarModalNuevoUsuario();
+        
+        const nombre = urlParams.get('nombre');
+        const email = urlParams.get('email');
+        
+        if (nombre) document.getElementById('nombre').value = decodeURIComponent(nombre);
+        if (email) document.getElementById('email').value = decodeURIComponent(email);
+        document.getElementById('solicitud_id').value = solicitudId;
+        
+        // Generar username sugerido basado en email
+        if (email) {
+            const username = email.split('@')[0].replace(/[^a-zA-Z0-9_]/g, '');
+            document.getElementById('username').value = username;
+        }
+        
+        showToast('Completa los datos para aprobar la solicitud', 'info');
+    }
+});
+
 // Desactivar usuario (soft delete)
-async function eliminarUsuario(id) {
+window.eliminarUsuario = async function(id) {
     const confirmado = await showConfirm(
         '¿Estás seguro de que deseas desactivar este usuario?',
         '⚠️ Desactivar Usuario'
@@ -897,7 +966,7 @@ async function eliminarUsuario(id) {
 }
 
 // Restaurar usuario
-async function restaurarUsuario(id) {
+window.restaurarUsuario = async function(id) {
     const confirmado = await showConfirm(
         '¿Estás seguro de que deseas restaurar este usuario?',
         '✅ Restaurar Usuario',
@@ -931,7 +1000,7 @@ async function restaurarUsuario(id) {
 }
 
 // Asignar edificios (simplificado - todos iguales)
-async function asignarEdificios(usuario_id) {
+window.asignarEdificios = async function(usuario_id) {
     const checkboxes = document.querySelectorAll('.edificio-checkbox:checked');
     const edificios = Array.from(checkboxes).map(cb => cb.value);
     
@@ -959,7 +1028,7 @@ async function asignarEdificios(usuario_id) {
 }
 
 // Filtrar por edificio
-function filtrarPorEdificio() {
+window.filtrarPorEdificio = function() {
     const filtroEdificio = document.getElementById('filtroEdificio').value.toLowerCase();
     const tbody = document.getElementById('tbody-usuarios');
     const rows = tbody.querySelectorAll('tr[data-activo]');
@@ -1004,22 +1073,25 @@ function filtrarPorEdificio() {
 }
 
 // Toggle para mostrar usuarios inactivos
-function toggleInactivos() {
+window.toggleInactivos = function() {
     // Al cambiar el estado de inactivos, re-aplicar el filtro de edificio
     filtrarPorEdificio();
 }
 
 // Cerrar modal
-function cerrarModal() {
+window.cerrarModal = function() {
     document.getElementById('modalUsuario').style.display = 'none';
     document.getElementById('formUsuario').reset();
 }
 
 // El modal ya NO se cierra al hacer clic fuera de él
 // Solo se puede cerrar con el botón X o el botón Cancelar
+})();
 </script>
+</section>
 
 <?php
+include '../includes/admin_layout_end.php';
 $conn->close();
 include '../includes/footer.php';
 ?>

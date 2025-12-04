@@ -16,6 +16,7 @@ $pageTitle = "📝 Solicitudes de Acceso";
 $useAdminLayout = true;
 include '../includes/header.php';
 include '../includes/admin_layout_start.php';
+require_once '../config/constants.php';
 
 
 $database = new Database();
@@ -24,9 +25,9 @@ $conn = $database->getConnection();
 // Obtener todas las solicitudes
 $sql = "SELECT * FROM solicitudes_acceso WHERE activo = 1 ORDER BY 
         CASE estado 
-            WHEN 'PENDIENTE' THEN 1 
-            WHEN 'APROBADA' THEN 2 
-            WHEN 'RECHAZADA' THEN 3 
+            WHEN '" . SOLICITUD_PENDIENTE . "' THEN 1 
+            WHEN '" . SOLICITUD_APROBADA . "' THEN 2 
+            WHEN '" . SOLICITUD_RECHAZADA . "' THEN 3 
         END, fecha_solicitud DESC";
 $result = $conn->query($sql);
 $solicitudes = $result->fetch_all(MYSQLI_ASSOC);
@@ -39,22 +40,35 @@ $conn->close();
     
     <div class="stats-container" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
         <?php
-        $pendientes = count(array_filter($solicitudes, fn($s) => $s['estado'] === 'PENDIENTE'));
-        $aprobadas = count(array_filter($solicitudes, fn($s) => $s['estado'] === 'APROBADA'));
-        $rechazadas = count(array_filter($solicitudes, fn($s) => $s['estado'] === 'RECHAZADA'));
+        $pendientes = count(array_filter($solicitudes, fn($s) => strtoupper($s['estado']) === SOLICITUD_PENDIENTE));
+        $aprobadas = count(array_filter($solicitudes, fn($s) => strtoupper($s['estado']) === SOLICITUD_APROBADA));
+        $rechazadas = count(array_filter($solicitudes, fn($s) => strtoupper($s['estado']) === SOLICITUD_RECHAZADA));
         ?>
         <div class="stat-card" style="background: #fff3cd; padding: 1.5rem; border-radius: 8px; text-align: center;">
             <h3 style="margin: 0; color: #856404; font-size: 2rem;"><?php echo $pendientes; ?></h3>
-            <p style="margin: 0.5rem 0 0 0; color: #856404;">Pendientes</p>
+            <p style="margin: 0.5rem 0 0 0; color: #856404;"><?php echo SOLICITUD_PENDIENTE; ?></p>
         </div>
         <div class="stat-card" style="background: #d4edda; padding: 1.5rem; border-radius: 8px; text-align: center;">
             <h3 style="margin: 0; color: #155724; font-size: 2rem;"><?php echo $aprobadas; ?></h3>
-            <p style="margin: 0.5rem 0 0 0; color: #155724;">Aprobadas</p>
+            <p style="margin: 0.5rem 0 0 0; color: #155724;"><?php echo SOLICITUD_APROBADA; ?></p>
         </div>
         <div class="stat-card" style="background: #f8d7da; padding: 1.5rem; border-radius: 8px; text-align: center;">
             <h3 style="margin: 0; color: #721c24; font-size: 2rem;"><?php echo $rechazadas; ?></h3>
-            <p style="margin: 0.5rem 0 0 0; color: #721c24;">Rechazadas</p>
+            <p style="margin: 0.5rem 0 0 0; color: #721c24;"><?php echo SOLICITUD_RECHAZADA; ?></p>
         </div>
+    </div>
+
+    <!-- Filtro de Estado -->
+    <div style="margin-bottom: 1.5rem; display: flex; align-items: center; gap: 1rem;">
+        <label for="filtroEstado" style="font-weight: 600; color: var(--color-gray-700);">
+            🔍 Filtrar por estado:
+        </label>
+        <select id="filtroEstado" onchange="filtrarSolicitudes()" class="form-control" style="max-width: 250px;">
+            <option value="TODAS">Todas las solicitudes</option>
+            <option value="<?php echo SOLICITUD_PENDIENTE; ?>" selected>Solo Pendientes</option>
+            <option value="<?php echo SOLICITUD_APROBADA; ?>">Solo Aprobadas</option>
+            <option value="<?php echo SOLICITUD_RECHAZADA; ?>">Solo Rechazadas</option>
+        </select>
     </div>
 
     <?php if (count($solicitudes) === 0): ?>
@@ -65,8 +79,8 @@ $conn->close();
         <div class="solicitudes-grid" style="display: grid; gap: 1.5rem;">
             <?php foreach ($solicitudes as $solicitud): ?>
                 <div class="solicitud-card" style="background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); border-left: 5px solid <?php 
-                    echo $solicitud['estado'] === 'PENDIENTE' ? '#ffc107' : 
-                        ($solicitud['estado'] === 'APROBADA' ? '#28a745' : '#dc3545'); 
+                    echo strtoupper($solicitud['estado']) === SOLICITUD_PENDIENTE ? '#ffc107' : 
+                        (strtoupper($solicitud['estado']) === SOLICITUD_APROBADA ? '#28a745' : '#dc3545'); 
                 ?>;">
                     <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
                         <div style="flex: 1;">
@@ -78,8 +92,8 @@ $conn->close();
                             </p>
                         </div>
                         <span style="padding: 0.5rem 1rem; border-radius: 20px; font-weight: 600; font-size: 0.9rem; <?php 
-                            echo $solicitud['estado'] === 'PENDIENTE' ? 'background: #fff3cd; color: #856404;' : 
-                                ($solicitud['estado'] === 'APROBADA' ? 'background: #d4edda; color: #155724;' : 'background: #f8d7da; color: #721c24;'); 
+                            echo strtoupper($solicitud['estado']) === SOLICITUD_PENDIENTE ? 'background: #fff3cd; color: #856404;' : 
+                                (strtoupper($solicitud['estado']) === SOLICITUD_APROBADA ? 'background: #d4edda; color: #155724;' : 'background: #f8d7da; color: #721c24;'); 
                         ?>">
                             <?php echo $solicitud['estado']; ?>
                         </span>
@@ -121,13 +135,13 @@ $conn->close();
                             📅 Solicitado: <?php echo date('d/m/Y H:i', strtotime($solicitud['fecha_solicitud'])); ?>
                         </small>
                         
-                        <?php if ($solicitud['estado'] === 'PENDIENTE'): ?>
+                        <?php if (strtoupper($solicitud['estado']) === SOLICITUD_PENDIENTE): ?>
                         <div style="display: flex; gap: 0.5rem;">
                             <button onclick="aprobarSolicitud(<?php echo $solicitud['id']; ?>, '<?php echo htmlspecialchars($solicitud['nombre_completo']); ?>', '<?php echo htmlspecialchars($solicitud['email']); ?>')" 
                                     class="btn-action btn-edit" style="background: #28a745; color: white; border: none; padding: 0.5rem 1rem; border-radius: 6px; cursor: pointer; font-weight: 600;">
                                 ✅ Aprobar
                             </button>
-                            <button onclick="rechazarSolicitud(<?php echo $solicitud['id']; ?>)" 
+                            <button onclick="rechazarSolicitud(<?php echo $solicitud['id']; ?>, '<?php echo htmlspecialchars($solicitud['nombre_completo']); ?>')" 
                                     class="btn-action btn-delete" style="background: #dc3545; color: white; border: none; padding: 0.5rem 1rem; border-radius: 6px; cursor: pointer; font-weight: 600;">
                                 ❌ Rechazar
                             </button>
@@ -138,14 +152,82 @@ $conn->close();
                         </small>
                         <?php endif; ?>
                     </div>
+                    
+                    <?php if (strtoupper($solicitud['estado']) === SOLICITUD_RECHAZADA && !empty($solicitud['respuesta_admin'])): ?>
+                    <div style="margin-top: 1rem; padding: 1rem; background: #fff3cd; border-left: 4px solid #ffc107; border-radius: 6px;">
+                        <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                            <span style="font-size: 1.2rem;">💬</span>
+                            <strong style="color: #856404;">Motivo del rechazo:</strong>
+                        </div>
+                        <p style="margin: 0; color: #856404; line-height: 1.5; white-space: pre-line;">
+                            <?php echo htmlspecialchars($solicitud['respuesta_admin']); ?>
+                        </p>
+                    </div>
+                    <?php endif; ?>
                 </div>
             <?php endforeach; ?>
         </div>
     <?php endif; ?>
+
+<!-- Modal para Rechazar Solicitud -->
+<div id="modalRechazar" class="modal">
+    <div class="modal-content modal-sm">
+        <span class="close" onclick="cerrarModalRechazar()">&times;</span>
+        <div class="modal-header">
+            <h3>❌ Rechazar Solicitud</h3>
+        </div>
+        <form id="formRechazar" onsubmit="return procesarRechazo(event);">
+            <div class="modal-body">
+                <p id="modalRechazarNombre" style="margin-bottom: 1.5rem; font-weight: 600; color: var(--color-gray-700);"></p>
+                <div class="form-group">
+                    <label for="motivoRechazo">Motivo del rechazo (opcional)</label>
+                    <textarea id="motivoRechazo" 
+                              name="motivo" 
+                              rows="4" 
+                              placeholder="Explica brevemente por qué se rechaza esta solicitud..."></textarea>
+                    <small>Describe el motivo del rechazo para mantener un registro</small>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" onclick="cerrarModalRechazar()" class="btn btn-light">Cancelar</button>
+                <button type="submit" class="btn btn-primary">Rechazar Solicitud</button>
+            </div>
+        </form>
+    </div>
+</div>
 </section>
 
 <script>
-async function aprobarSolicitud(id, nombre, email) {
+(function() {
+// Función para filtrar solicitudes por estado
+window.filtrarSolicitudes = function() {
+    const filtro = document.getElementById('filtroEstado').value;
+    const solicitudes = document.querySelectorAll('.solicitud-card');
+    
+    solicitudes.forEach(card => {
+        const estadoBadge = card.querySelector('span[style*="border-radius: 20px"]');
+        if (!estadoBadge) return;
+        
+        const estado = estadoBadge.textContent.trim().toUpperCase();
+        
+        if (filtro === 'TODAS') {
+            card.parentElement.style.display = 'block';
+        } else {
+            if (estado === filtro) {
+                card.parentElement.style.display = 'block';
+            } else {
+                card.parentElement.style.display = 'none';
+            }
+        }
+    });
+}
+
+// Aplicar filtro al cargar la página (mostrar solo pendientes por defecto)
+document.addEventListener('DOMContentLoaded', function() {
+    filtrarSolicitudes();
+});
+
+window.aprobarSolicitud = async function(id, nombre, email) {
     const confirmado = await showConfirm(
         `¿Aprobar solicitud de ${nombre}?\n\nEsto te redirigirá a crear un nuevo usuario con estos datos.`,
         '✅ Aprobar Solicitud',
@@ -157,10 +239,27 @@ async function aprobarSolicitud(id, nombre, email) {
     }
 }
 
-async function rechazarSolicitud(id) {
-    const motivo = prompt('¿Por qué rechazas esta solicitud? (opcional)');
+let solicitudActualId = null;
+
+window.rechazarSolicitud = function(id, nombre) {
+    solicitudActualId = id;
+    document.getElementById('modalRechazarNombre').textContent = `¿Estás seguro de rechazar la solicitud de ${nombre}?`;
+    document.getElementById('motivoRechazo').value = '';
+    document.getElementById('modalRechazar').classList.add('active');
+}
+
+window.cerrarModalRechazar = function() {
+    document.getElementById('modalRechazar').classList.remove('active');
+    solicitudActualId = null;
+}
+
+window.procesarRechazo = async function(event) {
+    event.preventDefault();
     
-    if (motivo === null) return; // Usuario canceló
+    const motivo = document.getElementById('motivoRechazo').value.trim();
+    const id = solicitudActualId;
+    
+    if (!id) return false;
     
     try {
         const formData = new FormData();
@@ -176,16 +275,20 @@ async function rechazarSolicitud(id) {
         const data = await response.json();
         
         if (data.success) {
-            alert('✅ Solicitud rechazada');
+            cerrarModalRechazar();
             location.reload();
         } else {
-            alert('❌ Error: ' + data.message);
+            console.error('Error:', data.message);
+            cerrarModalRechazar();
         }
     } catch (error) {
-        alert('❌ Error al procesar la solicitud');
-        console.error(error);
+        console.error('Error al procesar la solicitud:', error);
+        cerrarModalRechazar();
     }
+    
+    return false;
 }
+})();
 </script>
 
 <?php include '../includes/admin_layout_end.php';

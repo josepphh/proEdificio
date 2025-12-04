@@ -54,7 +54,7 @@ $conn->close();
         <h2 class="section-title">📢 Gestión de Avisos</h2>
         
         <div class="avisos-header">
-            <button onclick="nuevoAviso()" class="btn btn-success">+ Nuevo Aviso</button>
+            <button onclick="nuevoAviso()" class="btn btn-primary">+ Nuevo Aviso</button>
             <div class="d-flex gap-2">
                 <select id="filtroTipo" onchange="filtrarAvisos()" class="form-select">
                     <option value="">Todos los tipos</option>
@@ -144,7 +144,7 @@ $conn->close();
         </div>
         <div class="modal-footer">
             <button type="button" onclick="cerrarModal()" class="btn btn-light">Cancelar</button>
-            <button type="submit" class="btn btn-success">Guardar</button>
+            <button type="submit" class="btn btn-primary">Guardar</button>
         </div>
         </form>
     </div>

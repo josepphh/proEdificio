@@ -183,12 +183,13 @@ while ($permiso = $result_permisos->fetch_assoc()) {
 </style>
 
 <script>
+(function() {
 let rolActual = null;
 let permisosOriginales = [];
 let cambiosPendientes = false;
 
 // Cargar permisos del rol seleccionado
-async function cargarPermisosRol(rolId) {
+window.cargarPermisosRol = async function(rolId) {
     if (!rolId) {
         document.getElementById('permisosContainer').style.display = 'none';
         document.getElementById('infoRol').style.display = 'none';
@@ -229,7 +230,7 @@ async function cargarPermisosRol(rolId) {
 }
 
 // Toggle individual de permiso
-function togglePermiso(checkbox) {
+window.togglePermiso = function(checkbox) {
     cambiosPendientes = true;
     actualizarContador();
 }
@@ -241,7 +242,7 @@ function actualizarContador() {
 }
 
 // Resetear permisos al estado original
-function resetearPermisos() {
+window.resetearPermisos = function() {
     if (cambiosPendientes && !confirm('¿Descartar los cambios realizados?')) {
         return;
     }
@@ -249,7 +250,7 @@ function resetearPermisos() {
 }
 
 // Guardar cambios
-async function guardarCambios() {
+window.guardarCambios = async function() {
     if (!rolActual) {
         mostrarToast('Selecciona un rol primero', 'warning');
         return;
@@ -330,6 +331,7 @@ window.addEventListener('beforeunload', (e) => {
         e.returnValue = '';
     }
 });
+})();
 </script>
 
 <?php 

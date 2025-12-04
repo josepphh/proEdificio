@@ -376,8 +376,9 @@ $conn->close();
 </section>
 
 <script>
+(function() {
 // Función para filtrar reportes por edificio
-function filtrarPorEdificio(edificioId) {
+window.filtrarPorEdificio = function(edificioId) {
     if (edificioId) {
         window.location.href = '?edificio_id=' + edificioId;
     } else {
@@ -386,7 +387,7 @@ function filtrarPorEdificio(edificioId) {
 }
 
 // Función para limpiar el filtro
-function limpiarFiltro() {
+window.limpiarFiltro = function() {
     window.location.href = 'reportes.php';
 }
 
@@ -403,9 +404,9 @@ function limpiarFiltro() {
     ?>
     console.log('Filtro activo: <?php echo htmlspecialchars($nombre_edificio_filtrado, ENT_QUOTES); ?>');
 <?php endif; ?>
+})();
 </script>
 
 <?php include '../includes/admin_layout_end.php';
 include '../includes/admin_layout_end.php';
 include '../includes/footer.php'; ?>
-

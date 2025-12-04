@@ -1,4 +1,4 @@
-<body class="<?php echo (strpos($_SERVER['SCRIPT_NAME'], 'login.php') !== false) ? 'login-page' : ''; ?>">
+<?php if (!isset($useAdminLayout) || !$useAdminLayout): ?>
     <header>
         <h1>Bienvenidos a Mi Sitio</h1>
         <button class="hamburger-menu" onclick="toggleMobileMenu()" aria-label="Menú">
@@ -27,13 +27,8 @@
             <?php if(!isset($_SESSION['usuario_nombre'])): ?>
                 <button data-href="/proyectoEdificio/login.php" onclick="loadContent(this.dataset.href);">Iniciar Sesión</button>
             <?php else: ?>
-                <?php if(isset($_SESSION['rol_nombre']) && $_SESSION['rol_nombre'] === 'Administrador Total'): ?>
-                    <button data-href="/proyectoEdificio/admin/panel.php" onclick="loadContent(this.dataset.href);">Panel Admin</button>
-                    <button data-href="/proyectoEdificio/admin/solicitudes.php" onclick="loadContent(this.dataset.href);">📬 Solicitudes</button>
-                    <button data-href="/proyectoEdificio/cambiar_password.php" onclick="loadContent(this.dataset.href);">🔒 Contraseña</button>
-                <?php elseif(isset($_SESSION['rol_nombre']) && $_SESSION['rol_nombre'] === 'Administrador Edificio'): ?>
-                    <button data-href="/proyectoEdificio/admin/panel.php" onclick="loadContent(this.dataset.href);">Panel Admin</button>
-                    <button data-href="/proyectoEdificio/cambiar_password.php" onclick="loadContent(this.dataset.href);">🔒 Contraseña</button>
+                <?php if(isset($_SESSION['rol_nombre']) && ($_SESSION['rol_nombre'] === 'Administrador Total' || $_SESSION['rol_nombre'] === 'Administrador Edificio')): ?>
+                    <button onclick="window.location.href='/proyectoEdificio/admin/panel.php';">Panel Admin</button>
                 <?php elseif(isset($_SESSION['rol_nombre']) && $_SESSION['rol_nombre'] === 'Inquilino'): ?>
                     <button data-href="/proyectoEdificio/mi_perfil.php" onclick="loadContent(this.dataset.href);">Mi Perfil</button>
                     <button data-href="/proyectoEdificio/mis_pagos.php" onclick="loadContent(this.dataset.href);">Mis Pagos</button>
@@ -44,4 +39,5 @@
             <?php endif; ?>
         </nav>
     </header>
+<?php endif; ?>
     <main>

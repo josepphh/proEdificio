@@ -152,7 +152,7 @@ $result = $conn->query($sql);
         </div>
         <div class="modal-footer">
             <button type="button" onclick="cerrarModalEditar()" class="btn btn-light">Cancelar</button>
-            <button type="submit" class="btn btn-success">Guardar Cambios</button>
+            <button type="submit" class="btn btn-primary">Guardar Cambios</button>
         </div>
         </form>
     </div>
@@ -330,82 +330,76 @@ $result = $conn->query($sql);
 <div class="toast-container" id="toastContainer"></div>
 
 <script>
-// Sistema de notificaciones toast
-function showToast(message, type = 'info', title = '') {
+(function() {
+// Toast Notifications
+window.showToast = function(message, type = 'success') {
     const container = document.getElementById('toastContainer');
     const toast = document.createElement('div');
     toast.className = `toast ${type}`;
     
-    const icons = {
-        success: '✅',
-        error: '❌',
-        warning: '⚠️',
-        info: 'ℹ️'
-    };
-    
-    const titles = {
-        success: title || 'Éxito',
-        error: title || 'Error',
-        warning: title || 'Advertencia',
-        info: title || 'Información'
-    };
+    let icon = '';
+    switch(type) {
+        case 'success': icon = '✅'; break;
+        case 'error': icon = '❌'; break;
+        case 'warning': icon = '⚠️'; break;
+        case 'info': icon = 'ℹ️'; break;
+    }
     
     toast.innerHTML = `
-        <div class="toast-icon">${icons[type] || icons.info}</div>
+        <div class="toast-icon">${icon}</div>
         <div class="toast-content">
-            <div class="toast-title">${titles[type]}</div>
+            <div class="toast-title">${type.charAt(0).toUpperCase() + type.slice(1)}</div>
             <div class="toast-message">${message}</div>
         </div>
-        <div class="toast-close" onclick="closeToast(this)">×</div>
+        <button class="toast-close" onclick="closeToast(this)">×</button>
     `;
     
     container.appendChild(toast);
     
-    // Auto cerrar después de 4 segundos
+    // Auto remove after 5 seconds
     setTimeout(() => {
-        closeToast(toast.querySelector('.toast-close'));
-    }, 4000);
+        toast.style.animation = 'slideOut 0.3s ease-in forwards';
+        setTimeout(() => toast.remove(), 300);
+    }, 5000);
 }
 
-function closeToast(element) {
-    const toast = element.closest('.toast');
-    if (toast) {
-        toast.classList.add('hiding');
-        setTimeout(() => {
-            toast.remove();
-        }, 300);
-    }
+window.closeToast = function(button) {
+    const toast = button.closest('.toast');
+    toast.style.animation = 'slideOut 0.3s ease-in forwards';
+    setTimeout(() => toast.remove(), 300);
 }
 
-function toggleInactivos() {
-    const mostrar = document.getElementById('mostrarInactivos').checked;
-    const cards = document.querySelectorAll('.card[data-activo="0"]');
+window.toggleInactivos = function() {
+    const checkbox = document.getElementById('mostrarInactivos');
+    const rows = document.querySelectorAll('tr[data-activo]');
     
-    cards.forEach(card => {
-        card.style.display = mostrar ? 'block' : 'none';
+    rows.forEach(row => {
+        if (row.getAttribute('data-activo') == '0') {
+            row.style.display = checkbox.checked ? '' : 'none';
+        }
     });
 }
 
-function mostrarModalNuevoEdificio() {
+window.mostrarModalNuevoEdificio = function() {
     document.getElementById('modalNuevoEdificio').style.display = 'block';
 }
 
-async function crearEdificio(event) {
+window.crearEdificio = async function(event) {
     event.preventDefault();
     
     const formData = new FormData(document.getElementById('formNuevoEdificio'));
     formData.append('action', 'crear');
-
+    
     try {
         const response = await fetch('/proyectoEdificio/api/gestionar_edificio.php', {
             method: 'POST',
             body: formData
         });
-
+        
         const result = await response.json();
-
+        
         if (result.success) {
-            showToast('Edificio creado exitosamente', 'success');
+            showToast('Edificio creado exitosamente');
             cerrarModalNuevo();
             setTimeout(() => location.reload(), 1000);
         } else {
@@ -416,55 +410,51 @@ async function crearEdificio(event) {
     }
 }
 
-function cerrarModalNuevo() {
+window.cerrarModalNuevo = function() {
     document.getElementById('modalNuevoEdificio').style.display = 'none';
     document.getElementById('formNuevoEdificio').reset();
-    // Restablecer ciudad a Lima
-    document.getElementById('nuevo_ciudad').value = 'Lima';
 }
 
-async function editarEdificio(id) {
+window.editarEdificio = async function(id) {
     try {
         const response = await fetch(`/proyectoEdificio/api/get_edificio.php?id=${id}`);
         const result = await response.json();
-
+        
         if (result.success) {
             const edificio = result.edificio;
-
-            // Llenar formulario
+            
             document.getElementById('edit_edificio_id').value = edificio.id;
             document.getElementById('edit_nombre').value = edificio.nombre;
             document.getElementById('edit_direccion').value = edificio.direccion;
             document.getElementById('edit_ciudad').value = edificio.ciudad;
             document.getElementById('edit_num_pisos').value = edificio.num_pisos;
             document.getElementById('edit_num_departamentos').value = edificio.num_departamentos;
-
-            // Mostrar modal
+            
             document.getElementById('modalEditarEdificio').style.display = 'block';
         } else {
-            showToast('Error al cargar datos del edificio: ' + result.message, 'error');
+            showToast('Error al cargar datos del edificio', 'error');
         }
     } catch (error) {
         showToast('Error de conexión: ' + error.message, 'error');
     }
 }
 
-async function guardarEdificio(event) {
+window.guardarEdificio = async function(event) {
     event.preventDefault();
     
     const formData = new FormData(document.getElementById('formEditarEdificio'));
     formData.append('action', 'actualizar');
-
+    
     try {
         const response = await fetch('/proyectoEdificio/api/gestionar_edificio.php', {
             method: 'POST',
             body: formData
         });
-
+        
         const result = await response.json();
-
+        
         if (result.success) {
-            showToast('Edificio actualizado exitosamente', 'success');
+            showToast('Edificio actualizado exitosamente');
             cerrarModalEditar();
             setTimeout(() => location.reload(), 1000);
         } else {
@@ -475,75 +465,76 @@ async function guardarEdificio(event) {
     }
 }
 
-function cerrarModalEditar() {
+window.cerrarModalEditar = function() {
     document.getElementById('modalEditarEdificio').style.display = 'none';
     document.getElementById('formEditarEdificio').reset();
 }
 
-// Los modales ya NO se cierran al hacer clic fuera
-// Solo se pueden cerrar con el botón X o Cancelar
-
-async function eliminarEdificio(id) {
+window.eliminarEdificio = async function(id) {
     const confirmado = await showConfirm(
-        '¿Desea desactivar este edificio?',
-        '⚠️ Desactivar Edificio'
+        '¿Está seguro de eliminar este edificio?',
+        '🗑️ Eliminar Edificio'
     );
-    if (confirmado) {
+    if (!confirmado) return;
+    
+    try {
         const formData = new FormData();
         formData.append('action', 'eliminar');
-        formData.append('edificio_id', id);
+        formData.append('id', id);
         
-        fetch('/proyectoEdificio/api/gestionar_edificio.php', {
+        const response = await fetch('/proyectoEdificio/api/gestionar_edificio.php', {
             method: 'POST',
             body: formData
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                showToast(data.message, 'success');
-                setTimeout(() => location.reload(), 1000);
-            } else {
-                showToast(data.message, 'error');
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            showToast('Error al desactivar el edificio', 'error');
         });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            showToast('Edificio eliminado exitosamente');
+            setTimeout(() => location.reload(), 1000);
+        } else {
+            showToast(result.message, 'error');
+        }
+    } catch (error) {
+        showToast('Error de conexión: ' + error.message, 'error');
     }
 }
 
-async function restaurarEdificio(id) {
+window.restaurarEdificio = async function(id) {
     const confirmado = await showConfirm(
-        '¿Desea restaurar este edificio?',
+        '¿Está seguro de restaurar este edificio?',
         '✅ Restaurar Edificio',
         'Restaurar',
         'btn-success'
     );
-    if (confirmado) {
+    if (!confirmado) return;
+    
+    try {
         const formData = new FormData();
         formData.append('action', 'restaurar');
-        formData.append('edificio_id', id);
+        formData.append('id', id);
         
-        fetch('/proyectoEdificio/api/gestionar_edificio.php', {
+        const response = await fetch('/proyectoEdificio/api/gestionar_edificio.php', {
             method: 'POST',
             body: formData
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                showToast(data.message, 'success');
-                setTimeout(() => location.reload(), 1000);
-            } else {
-                showToast(data.message, 'error');
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            showToast('Error al restaurar el edificio', 'error');
         });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            showToast('Edificio restaurado exitosamente');
+            setTimeout(() => location.reload(), 1000);
+        } else {
+            showToast(result.message, 'error');
+        }
+    } catch (error) {
+        showToast('Error de conexión: ' + error.message, 'error');
     }
 }
+
+// Los modales ya NO se cierran al hacer clic fuera
+// Solo se pueden cerrar con el botón X o Cancelar
+})();
 </script>
 
 <?php 

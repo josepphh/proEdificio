@@ -226,13 +226,13 @@ $conn->close();
             <p>👆 Selecciona un edificio para ver sus inquilinos</p>
         </div>
     <?php endif; ?>
-</section>
+
 
 <!-- Modal para ver detalle del inquilino -->
 <div id="modalDetalle" class="modal" style="display: none;">
     <div class="modal-content" style="max-width: 800px;">
         <span class="close" onclick="cerrarModalDetalle()">&times;</span>
-        <h3 id="modalTitulo">Detalle del Inquilino</h3>
+        <h3 id="modalTituloInquilino">Detalle del Inquilino</h3>
         <div id="modalBody"></div>
     </div>
 </div>
@@ -266,8 +266,9 @@ $conn->close();
                 <button type="button" onclick="cerrarModalEditar()" class="btn-cancel">Cancelar</button>
             </div>
         </form>
-    </div>
 </div>
+</div>
+</section>
 
 <style>
     .filter-section {
@@ -364,7 +365,8 @@ $conn->close();
 </style>
 
 <script>
-function cargarInquilinos() {
+(function() {
+window.cargarInquilinos = function() {
     const edificio_id = document.getElementById('edificio_id').value;
     if (edificio_id) {
         window.location.href = '/proyectoEdificio/admin/inquilinos.php?edificio_id=' + edificio_id;
@@ -373,7 +375,7 @@ function cargarInquilinos() {
     }
 }
 
-function toggleInactivos() {
+window.toggleInactivos = function() {
     const checkbox = document.getElementById('mostrarInactivos');
     const rows = document.querySelectorAll('tr[data-activo]');
     
@@ -384,7 +386,7 @@ function toggleInactivos() {
     });
 }
 
-async function verDetalleInquilino(usuario_id) {
+window.verDetalleInquilino = async function(usuario_id) {
     try {
         const response = await fetch(`/proyectoEdificio/api/get_inquilino.php?id=${usuario_id}`);
         const result = await response.json();
@@ -418,7 +420,7 @@ async function verDetalleInquilino(usuario_id) {
     }
 }
 
-async function editarInquilino(usuario_id) {
+window.editarInquilino = async function(usuario_id) {
     try {
         const response = await fetch(`/proyectoEdificio/api/get_inquilino.php?id=${usuario_id}`);
         const result = await response.json();
@@ -442,7 +444,7 @@ async function editarInquilino(usuario_id) {
     }
 }
 
-async function guardarInquilino(event) {
+window.guardarInquilino = async function(event) {
     event.preventDefault();
     
     const formData = new FormData(document.getElementById('formEditarInquilino'));
@@ -469,7 +471,7 @@ async function guardarInquilino(event) {
     }
 }
 
-async function desactivarInquilino(usuario_id) {
+window.desactivarInquilino = async function(usuario_id) {
     const confirmado = await showConfirm(
         '¿Está seguro de desactivar este inquilino?',
         '⚠️ Desactivar Inquilino'
@@ -499,7 +501,7 @@ async function desactivarInquilino(usuario_id) {
     }
 }
 
-async function activarInquilino(usuario_id) {
+window.activarInquilino = async function(usuario_id) {
     const confirmado = await showConfirm(
         '¿Está seguro de activar este inquilino?',
         '✅ Activar Inquilino',
@@ -531,17 +533,18 @@ async function activarInquilino(usuario_id) {
     }
 }
 
-function cerrarModalDetalle() {
+window.cerrarModalDetalle = function() {
     document.getElementById('modalDetalle').style.display = 'none';
 }
 
-function cerrarModalEditar() {
+window.cerrarModalEditar = function() {
     document.getElementById('modalEditar').style.display = 'none';
     document.getElementById('formEditarInquilino').reset();
 }
 
 // Los modales ya NO se cierran al hacer clic fuera
 // Solo se pueden cerrar con el botón X o Cancelar
+})();
 </script>
 
 <?php include '../includes/admin_layout_end.php';

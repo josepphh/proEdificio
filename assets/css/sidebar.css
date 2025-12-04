@@ -104,26 +104,29 @@
 
 /* Items del sidebar */
 .sidebar-item {
-    display: flex;
+    display: flex !important;
     align-items: center;
     gap: 1rem;
-    padding: 0.875rem 1.25rem;
-    color: var(--sidebar-text);
-    text-decoration: none;
+    padding: 0.875rem 1.25rem !important;
+    color: var(--sidebar-text) !important;
+    text-decoration: none !important;
     transition: var(--sidebar-transition);
     border-left: 3px solid transparent;
     position: relative;
+    background: transparent !important;
+    border: none !important;
+    border-left: 3px solid transparent !important;
 }
 
 .sidebar-item:hover {
-    background: var(--sidebar-bg-hover);
-    color: var(--color-white);
+    background: var(--sidebar-bg-hover) !important;
+    color: var(--color-white) !important;
 }
 
 .sidebar-item.active {
-    background: var(--sidebar-active-bg);
-    border-left-color: var(--sidebar-active-border);
-    color: var(--color-white);
+    background: var(--sidebar-active-bg) !important;
+    border-left-color: var(--sidebar-active-border) !important;
+    color: var(--color-white) !important;
 }
 
 .sidebar-item.active::before {

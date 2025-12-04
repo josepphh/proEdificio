@@ -307,7 +307,8 @@ $stats_alta_prioridad = count(array_filter($incidencias, fn($i) => $i['prioridad
 
 
 <script>
-async function verDetalleIncidencia(incidenciaId) {
+(function() {
+window.verDetalleIncidencia = async function(incidenciaId) {
     const modal = document.getElementById('modalIncidencia');
     const contenido = document.getElementById('contenidoModalIncidencia');
     
@@ -425,7 +426,7 @@ function mostrarDetalleIncidencia(inc, comentarios) {
     document.getElementById('contenidoModalIncidencia').innerHTML = html;
 }
 
-async function cambiarEstado(incidenciaId, nuevoEstado) {
+window.cambiarEstado = async function(incidenciaId, nuevoEstado) {
     const confirmado = await showConfirm(
         '¿Cambiar el estado de esta incidencia?',
         '🔄 Cambiar Estado',
@@ -459,7 +460,7 @@ async function cambiarEstado(incidenciaId, nuevoEstado) {
     }
 }
 
-async function agregarComentario(incidenciaId) {
+window.agregarComentario = async function(incidenciaId) {
     const textarea = document.getElementById('nuevoComentario');
     const comentario = textarea.value.trim();
     
@@ -493,12 +494,13 @@ async function agregarComentario(incidenciaId) {
     }
 }
 
-function cerrarModalIncidencia() {
+window.cerrarModalIncidencia = function() {
     document.getElementById('modalIncidencia').style.display = 'none';
 }
 
-// El modal ya NO se cierra al hacer clic fuera
+// Los modales ya NO se cierran al hacer clic fuera
 // Solo se puede cerrar con el botón X o Cancelar
+})();
 </script>
 
 <?php

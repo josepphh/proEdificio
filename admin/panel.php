@@ -29,8 +29,7 @@ include '../includes/admin_layout_start.php';
                 <div class="card-bordered">
                     <div class="card-bordered-icon">👥</div>
                     <h3>Gestión de Usuarios</h3>
-                    <p><?php echo tienePermiso('acceso_completo') ? 'Administra todos los usuarios del sistema' : 'Administra usuarios de tus edificios'; ?></p>
-                    <a href="/proyectoEdificio/admin/usuarios.php" onclick="event.preventDefault(); loadContent('/proyectoEdificio/admin/usuarios.php');" class="btn btn-primary btn-block mt-2">Ver Usuarios</a>
+                    <p><?php echo tienePermiso('acceso_completo') ? 'Administra todos los usuarios del sistema, incluyendo roles y permisos.' : 'Administra los usuarios asignados a tus edificios.'; ?></p>
                 </div>
                 <?php endif; ?>
                 
@@ -38,8 +37,7 @@ include '../includes/admin_layout_start.php';
                 <div class="card-bordered">
                     <div class="card-bordered-icon">🏛️</div>
                     <h3>Gestión de Edificios</h3>
-                    <p><?php echo tienePermiso('acceso_completo') ? 'Administra edificios y sus propiedades' : 'Visualiza tus edificios asignados'; ?></p>
-                    <a href="/proyectoEdificio/admin/edificios.php" onclick="event.preventDefault(); loadContent('/proyectoEdificio/admin/edificios.php');" class="btn btn-primary btn-block mt-2">Ver Edificios</a>
+                    <p><?php echo tienePermiso('acceso_completo') ? 'Administra el registro de edificios, sus propiedades y características.' : 'Visualiza la información de tus edificios asignados.'; ?></p>
                 </div>
                 <?php endif; ?>
                 
@@ -47,8 +45,7 @@ include '../includes/admin_layout_start.php';
                 <div class="card-bordered">
                     <div class="card-bordered-icon">🏘️</div>
                     <h3>Gestión de Inquilinos</h3>
-                    <p>Gestiona inquilinos por edificio</p>
-                    <a href="/proyectoEdificio/admin/inquilinos.php" onclick="event.preventDefault(); loadContent(this.href);" class="btn btn-primary btn-block mt-2">Ver Inquilinos</a>
+                    <p>Gestiona la información de los inquilinos, asignación a departamentos y contratos.</p>
                 </div>
                 <?php endif; ?>
                 
@@ -56,8 +53,7 @@ include '../includes/admin_layout_start.php';
                 <div class="card-bordered">
                     <div class="card-bordered-icon">🔑</div>
                     <h3>Gestión de Roles</h3>
-                    <p>Administra roles del sistema</p>
-                    <a href="/proyectoEdificio/admin/roles.php" onclick="event.preventDefault(); loadContent('/proyectoEdificio/admin/roles.php');" class="btn btn-primary btn-block mt-2">Ver Roles</a>
+                    <p>Administra los roles del sistema y sus niveles de acceso.</p>
                 </div>
                 <?php endif; ?>
                 
@@ -65,8 +61,7 @@ include '../includes/admin_layout_start.php';
                 <div class="card-bordered">
                     <div class="card-bordered-icon">🔐</div>
                     <h3>Permisos por Rol</h3>
-                    <p>Gestiona qué permisos tiene cada rol</p>
-                    <a href="/proyectoEdificio/admin/permisos.php" onclick="event.preventDefault(); loadContent('/proyectoEdificio/admin/permisos.php');" class="btn btn-primary btn-block mt-2">Gestionar Permisos</a>
+                    <p>Configura detalladamente qué permisos tiene cada rol en el sistema.</p>
                 </div>
                 <?php endif; ?>
                 
@@ -74,8 +69,7 @@ include '../includes/admin_layout_start.php';
                 <div class="card-bordered">
                     <div class="card-bordered-icon">📢</div>
                     <h3>Gestión de Avisos</h3>
-                    <p>Crea y administra avisos para los usuarios</p>
-                    <a href="/proyectoEdificio/admin/avisos.php" onclick="event.preventDefault(); loadContent('/proyectoEdificio/admin/avisos.php');" class="btn btn-primary btn-block mt-2">Ver Avisos</a>
+                    <p>Crea y administra avisos importantes para comunicar a los usuarios.</p>
                 </div>
                 <?php endif; ?>
                 
@@ -83,8 +77,7 @@ include '../includes/admin_layout_start.php';
                 <div class="card-bordered">
                     <div class="card-bordered-icon">💰</div>
                     <h3>Registrar Gastos</h3>
-                    <p>Registra gastos del mes y procesa cierre</p>
-                    <a href="/proyectoEdificio/admin/registrar_gastos.php" onclick="event.preventDefault(); loadContent(this.href);" class="btn btn-primary btn-block mt-2">Registrar Gastos</a>
+                    <p>Registra los gastos mensuales del edificio y procesa el cierre de mes.</p>
                 </div>
                 <?php endif; ?>
                 
@@ -92,8 +85,7 @@ include '../includes/admin_layout_start.php';
                 <div class="card-bordered">
                     <div class="card-bordered-icon">📅</div>
                     <h3>Procesar Cierre</h3>
-                    <p>Visualiza ciclos de facturación</p>
-                    <a href="/proyectoEdificio/admin/procesar_cierre.php" onclick="event.preventDefault(); loadContent(this.href);" class="btn btn-primary btn-block mt-2">Ver Ciclos</a>
+                    <p>Visualiza y gestiona los ciclos de facturación y cierres mensuales.</p>
                 </div>
                 <?php endif; ?>
                 
@@ -101,8 +93,7 @@ include '../includes/admin_layout_start.php';
                 <div class="card-bordered">
                     <div class="card-bordered-icon">📊</div>
                     <h3>Reportes</h3>
-                    <p>Visualiza estadísticas y reportes del sistema</p>
-                    <a href="/proyectoEdificio/admin/reportes.php" onclick="event.preventDefault(); loadContent(this.href);" class="btn btn-primary btn-block mt-2">Ver Reportes</a>
+                    <p>Accede a estadísticas detalladas y reportes financieros del sistema.</p>
                 </div>
                 <?php endif; ?>
             </div>
@@ -110,26 +101,7 @@ include '../includes/admin_layout_start.php';
     </main>
 </div>
 
-<style>
-    .card-bordered {
-        display: flex;
-        flex-direction: column;
-        height: 100%;
-    }
-    
-    .card-bordered h3 {
-        flex-shrink: 0;
-    }
-    
-    .card-bordered p {
-        flex-grow: 1;
-        margin-bottom: 1rem;
-    }
-    
-    .card-bordered .btn {
-        margin-top: auto;
-    }
-</style>
+
 
 <?php 
 include '../includes/admin_layout_end.php';
