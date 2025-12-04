@@ -35,4 +35,5 @@ $base_path = str_repeat('../', max(0, $depth));
 <script src="<?php echo $base_path; ?>js/theme-switcher.js" defer></script>
 <?php if (isset($useAdminLayout) && $useAdminLayout): ?>
 <script src="<?php echo $base_path; ?>js/sidebar.js" defer></script>
+<script src="<?php echo $base_path; ?>js/update-title.js" defer></script>
 <?php endif; ?>

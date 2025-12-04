@@ -101,7 +101,7 @@ $conn->close();
 ?>
 
 <section class="content-section">
-    <h2 class="section-title">Gestión de Inquilinos por Edificio</h2>
+    <h2 class="section-title">🏘️ Gestión de Inquilinos por Edificio</h2>
     
     <div class="filter-section">
         <div class="form-group">

@@ -70,6 +70,19 @@ function loadContent(page) {
                 }
             });
 
+            // Actualizar el título del header
+            const pageTitleElement = document.getElementById('pageTitle');
+            if (pageTitleElement) {
+                const h2Title = doc.querySelector('h2.section-title');
+                const h1Title = doc.querySelector('h1');
+                if (h2Title) {
+                    pageTitleElement.textContent = h2Title.textContent;
+                } else if (h1Title) {
+                    pageTitleElement.textContent = h1Title.textContent;
+                }
+            }
+
+
             // Actualizar la URL sin recargar la página
             window.history.pushState({}, '', page);
         })
